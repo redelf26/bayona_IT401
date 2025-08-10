@@ -3,1089 +3,461 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>System Administration Journey - IT401</title>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        line-height: 1.6;
-        color: #333;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
-      }
-
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-        background: rgba(255, 255, 255, 0.95);
-        margin-top: 20px;
-        margin-bottom: 20px;
-        border-radius: 15px;
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-      }
-
-      header {
-        text-align: center;
-        margin-bottom: 40px;
-        padding: 30px 0;
-        background: linear-gradient(135deg, #2c3e50, #34495e);
-        color: white;
-        border-radius: 10px;
-        margin: -20px -20px 40px -20px;
-      }
-
-      h1 {
-        font-size: 2.5em;
-        margin-bottom: 10px;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-      }
-
-      .subtitle {
-        font-size: 1.2em;
-        opacity: 0.9;
-      }
-
-      .navigation {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 15px;
-        margin-bottom: 40px;
-        padding: 20px;
-        background: #f8f9fa;
-        border-radius: 10px;
-      }
-
-      .nav-btn {
-        padding: 12px 24px;
-        background: #3498db;
-        color: white;
-        border: none;
-        border-radius: 25px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        text-decoration: none;
-        display: inline-block;
-      }
-
-      .nav-btn:hover {
-        background: #2980b9;
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
-      }
-
-      .section {
-        display: none;
-        animation: fadeIn 0.5s ease-in;
-      }
-
-      .section.active {
-        display: block;
-      }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      h2 {
-        color: #2c3e50;
-        margin-bottom: 20px;
-        padding-bottom: 10px;
-        border-bottom: 3px solid #3498db;
-        font-size: 1.8em;
-      }
-
-      h3 {
-        color: #34495e;
-        margin: 25px 0 15px 0;
-        font-size: 1.3em;
-      }
-
-      .card {
-        background: white;
-        padding: 25px;
-        margin: 20px 0;
-        border-radius: 10px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-        border-left: 5px solid #3498db;
-        transition: transform 0.3s ease;
-      }
-
-      .card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-      }
-
-      .code-block {
-        background: #2c3e50;
-        color: #ecf0f1;
-        padding: 20px;
-        border-radius: 8px;
-        margin: 15px 0;
-        font-family: "Courier New", monospace;
-        overflow-x: auto;
-        border-left: 4px solid #e74c3c;
-      }
-
-      .warning {
-        background: #fff3cd;
-        border: 1px solid #ffeaa7;
-        padding: 15px;
-        border-radius: 8px;
-        margin: 15px 0;
-        border-left: 4px solid #f39c12;
-      }
-
-      .tip {
-        background: #d4edda;
-        border: 1px solid #c3e6cb;
-        padding: 15px;
-        border-radius: 8px;
-        margin: 15px 0;
-        border-left: 4px solid #27ae60;
-      }
-
-      .skills-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 20px;
-        margin: 20px 0;
-      }
-
-      .skill-item {
-        background: #f8f9fa;
-        padding: 20px;
-        border-radius: 10px;
-        text-align: center;
-        border: 2px solid #e9ecef;
-        transition: all 0.3s ease;
-      }
-
-      .skill-item:hover {
-        border-color: #3498db;
-        background: #ebf3fd;
-      }
-
-      .progress-bar {
-        width: 100%;
-        height: 10px;
-        background: #e9ecef;
-        border-radius: 5px;
-        margin: 10px 0;
-        overflow: hidden;
-      }
-
-      .progress {
-        height: 100%;
-        background: linear-gradient(90deg, #3498db, #2ecc71);
-        border-radius: 5px;
-        transition: width 0.5s ease;
-      }
-
-      .checklist {
-        list-style: none;
-      }
-
-      .checklist li {
-        padding: 10px 0;
-        position: relative;
-        padding-left: 30px;
-      }
-
-      .checklist li:before {
-        content: "✓";
-        position: absolute;
-        left: 0;
-        color: #27ae60;
-        font-weight: bold;
-        font-size: 1.2em;
-      }
-
-      .timeline {
-        position: relative;
-        padding-left: 30px;
-      }
-
-      .timeline:before {
-        content: "";
-        position: absolute;
-        left: 10px;
-        top: 0;
-        bottom: 0;
-        width: 2px;
-        background: #3498db;
-      }
-
-      .timeline-item {
-        position: relative;
-        margin-bottom: 30px;
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-      }
-
-      .timeline-item:before {
-        content: "";
-        position: absolute;
-        left: -25px;
-        top: 25px;
-        width: 12px;
-        height: 12px;
-        background: #3498db;
-        border-radius: 50%;
-        border: 3px solid white;
-      }
-
-      .footer {
-        text-align: center;
-        margin-top: 50px;
-        padding: 30px;
-        background: #2c3e50;
-        color: white;
-        border-radius: 10px;
-        margin-left: -20px;
-        margin-right: -20px;
-        margin-bottom: -20px;
-      }
-
-      @media (max-width: 768px) {
-        .navigation {
-          flex-direction: column;
-        }
-
-        .skills-grid {
-          grid-template-columns: 1fr;
-        }
-
-        .container {
-          margin: 10px;
-          padding: 15px;
-        }
-
-        h1 {
-          font-size: 2em;
-        }
-      }
-    </style>
+    <title>IT401 System Administration & Learning Diary</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="container">
       <header>
-        <h1>🖥️ System Administration Journey</h1>
-        <p class="subtitle">Complete Documentation & Learning Path for IT401</p>
+        <h1>📚 IT401 System Administration & Maintenance</h1>
+        <p class="subtitle">Learning Journey & Documentation</p>
       </header>
 
       <nav class="navigation">
+        <button class="nav-btn active" onclick="showSection('diary')">
+          📝 Learning Diary
+        </button>
         <button class="nav-btn" onclick="showSection('overview')">
-          📋 Overview
-        </button>
-        <button class="nav-btn" onclick="showSection('fundamentals')">
-          🔧 Fundamentals
-        </button>
-        <button class="nav-btn" onclick="showSection('linux')">
-          🐧 Linux Admin
-        </button>
-        <button class="nav-btn" onclick="showSection('windows')">
-          🪟 Windows Admin
-        </button>
-        <button class="nav-btn" onclick="showSection('networking')">
-          🌐 Networking
-        </button>
-        <button class="nav-btn" onclick="showSection('security')">
-          🔒 Security
-        </button>
-        <button class="nav-btn" onclick="showSection('cloud')">☁️ Cloud</button>
-        <button class="nav-btn" onclick="showSection('tools')">🛠️ Tools</button>
-        <button class="nav-btn" onclick="showSection('career')">
-          📈 Career Path
+          📋 Lesson Overview
         </button>
       </nav>
 
-      <!-- Overview Section -->
-      <section id="overview" class="section active">
-        <h2>📋 System Administration Overview</h2>
+      <!-- Learning Diary Section -->
+      <section id="diary" class="section active">
+        <h2>📝 Learning Diary</h2>
+
+        <div class="stats-container">
+          <div class="stat-card">
+            <div class="stat-number" id="totalEntries">0</div>
+            <div>Total Entries</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="currentWeek">1</div>
+            <div>Current Week</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="topicsLearned">0</div>
+            <div>Topics Learned</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="daysActive">0</div>
+            <div>Days Active</div>
+          </div>
+        </div>
+
+        <div class="diary-container">
+          <!-- Add New Entry Form -->
+          <div class="diary-form">
+            <h3>✍️ Add New Learning Entry</h3>
+            <form id="diaryForm" class="modern-form" novalidate>
+              <!-- Form Grid Section 1: Basic Info -->
+              <div class="form-section">
+                <h4 class="section-title">📝 Basic Information</h4>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label for="entryType" class="form-label">
+                      <span class="label-text">Entry Type</span>
+                      <span class="required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                      <select
+                        id="entryType"
+                        class="form-input"
+                        required
+                        aria-describedby="entryType-error"
+                      >
+                        <option value="">Choose entry type...</option>
+                        <option value="orientation">
+                          🎯 Class Orientation
+                        </option>
+                        <option value="day">📖 Daily Learning</option>
+                        <option value="lab">🔬 Lab Exercise</option>
+                        <option value="assignment">📄 Assignment</option>
+                        <option value="exam">📝 Exam/Quiz</option>
+                        <option value="project">🚀 Project Work</option>
+                        <option value="research">🔍 Research/Reading</option>
+                      </select>
+                      <div class="input-icon">
+                        <svg
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          viewBox="0 0 16 16"
+                        >
+                          <path
+                            d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    <div
+                      id="entryType-error"
+                      class="error-message"
+                      role="alert"
+                    ></div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="weekNumber" class="form-label">
+                      <span class="label-text">Week Number</span>
+                      <span class="required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                      <input
+                        type="number"
+                        id="weekNumber"
+                        class="form-input"
+                        min="1"
+                        max="16"
+                        value="1"
+                        required
+                        aria-describedby="weekNumber-help weekNumber-error"
+                      />
+                      <div class="input-icon">
+                        <svg
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          viewBox="0 0 16 16"
+                        >
+                          <path
+                            d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"
+                          />
+                          <path
+                            d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    <div id="weekNumber-help" class="help-text">
+                      Current semester week (1-16)
+                    </div>
+                    <div
+                      id="weekNumber-error"
+                      class="error-message"
+                      role="alert"
+                    ></div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="dayNumber" class="form-label">
+                      <span class="label-text">Day</span>
+                      <span class="optional">(optional)</span>
+                    </label>
+                    <div class="input-wrapper">
+                      <input
+                        type="number"
+                        id="dayNumber"
+                        class="form-input"
+                        min="1"
+                        max="3"
+                        placeholder="1-3"
+                        aria-describedby="dayNumber-help"
+                      />
+                      <div class="input-icon">
+                        <svg
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          viewBox="0 0 16 16"
+                        >
+                          <path
+                            d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"
+                          />
+                          <path
+                            d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    <div id="dayNumber-help" class="help-text">
+                      Class session number within the week (1st day, 2nd day,
+                      etc.)
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="lessonDate" class="form-label">
+                      <span class="label-text">Lesson Date</span>
+                      <span class="optional">(optional)</span>
+                    </label>
+                    <div class="input-wrapper">
+                      <input
+                        type="date"
+                        id="lessonDate"
+                        class="form-input"
+                        aria-describedby="lessonDate-help"
+                      />
+                      <div class="input-icon">
+                        <svg
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          viewBox="0 0 16 16"
+                        >
+                          <path
+                            d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"
+                          />
+                          <path
+                            d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    <div id="lessonDate-help" class="help-text">
+                      Date when this lesson took place
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Form Grid Section 2: Content -->
+              <div class="form-section">
+                <h4 class="section-title">📚 Learning Content</h4>
+
+                <div class="form-group">
+                  <label for="entryTitle" class="form-label">
+                    <span class="label-text">Title/Topic</span>
+                    <span class="required">*</span>
+                  </label>
+                  <div class="input-wrapper">
+                    <input
+                      type="text"
+                      id="entryTitle"
+                      class="form-input"
+                      placeholder="What did you learn today?"
+                      required
+                      maxlength="100"
+                      aria-describedby="entryTitle-error entryTitle-counter"
+                    />
+                    <div class="input-icon">
+                      <svg
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
+                        />
+                        <path
+                          d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="input-footer">
+                    <div id="entryTitle-counter" class="char-counter">
+                      0/100
+                    </div>
+                    <div
+                      id="entryTitle-error"
+                      class="error-message"
+                      role="alert"
+                    ></div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="topics" class="form-label">
+                    <span class="label-text">Topics Covered</span>
+                    <span class="optional">(comma-separated)</span>
+                  </label>
+                  <div class="textarea-wrapper">
+                    <textarea
+                      id="topics"
+                      class="form-textarea"
+                      placeholder="Enter topics separated by commas:
+Linux commands, File permissions, Network configuration, System administration, Security hardening, Troubleshooting..."
+                      rows="3"
+                      maxlength="250"
+                      aria-describedby="topics-help topics-counter"
+                      data-tags="true"
+                    ></textarea>
+                    <div class="textarea-resize-handle"></div>
+                  </div>
+                  <div class="input-footer">
+                    <span id="topics-counter" class="char-counter">0/250</span>
+                    <span id="topics-help" class="help-text">
+                      Separate multiple topics with commas
+                    </span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="entryContent" class="form-label">
+                    <span class="label-text">Learning Details</span>
+                    <span class="required">*</span>
+                  </label>
+                  <div class="textarea-wrapper">
+                    <textarea
+                      id="entryContent"
+                      class="form-textarea"
+                      placeholder="Enter each learning point on a new line, or use - for bullets:
+- Learned Linux commands
+- Practiced file permissions
+- Troubleshot network issues"
+                      required
+                      rows="6"
+                      maxlength="2000"
+                      aria-describedby="entryContent-error entryContent-counter"
+                    ></textarea>
+                    <div class="textarea-resize-handle"></div>
+                  </div>
+                  <div class="input-footer">
+                    <div id="entryContent-counter" class="char-counter">
+                      0/2000
+                    </div>
+                    <div
+                      id="entryContent-error"
+                      class="error-message"
+                      role="alert"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Form Grid Section 3: Metadata -->
+              <div class="form-section">
+                <h4 class="section-title">⚙️ Learning Metadata</h4>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label for="timeSpent" class="form-label">
+                      <span class="label-text">Time Spent</span>
+                      <span class="optional">(hours)</span>
+                    </label>
+                    <div class="input-wrapper">
+                      <input
+                        type="number"
+                        id="timeSpent"
+                        class="form-input"
+                        min="0.5"
+                        max="24"
+                        step="0.5"
+                        placeholder="2.5"
+                        aria-describedby="timeSpent-help"
+                      />
+                      <div class="input-icon">
+                        <svg
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          viewBox="0 0 16 16"
+                        >
+                          <path
+                            d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"
+                          />
+                          <path
+                            d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    <div id="timeSpent-help" class="help-text">
+                      Estimated learning time in hours
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                  <span class="btn-icon">💾</span>
+                  <span class="btn-text">Save Learning Entry</span>
+                  <div class="btn-loader" aria-hidden="true">
+                    <svg
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M8 0c-4.418 0-8 3.582-8 8 0 1.017.196 1.989.552 2.887l1.614-.914A5.928 5.928 0 0 1 2 8c0-3.313 2.687-6 6-6s6 2.687 6 6-2.687 6-6 6a5.928 5.928 0 0 1-2.166-.166l-.914 1.614A7.929 7.929 0 0 0 8 16c4.418 0 8-3.582 8-8S12.418 0 8 0z"
+                      />
+                    </svg>
+                  </div>
+                </button>
+              </div>
+            </form>
+
+            <div class="export-section">
+              <h4>📥 Data Management</h4>
+              <button class="btn btn-secondary" onclick="exportDiary()">
+                📤 Export Diary (JSON)
+              </button>
+              <button class="btn btn-secondary" onclick="importDiary()">
+                📥 Import Diary
+              </button>
+              <input
+                type="file"
+                id="importFile"
+                accept=".json"
+                style="display: none"
+              />
+            </div>
+          </div>
+
+          <!-- Display Entries -->
+          <div class="diary-entries">
+            <h3>📚 Learning Entries</h3>
+
+            <div class="search-filter">
+              <input
+                type="text"
+                id="searchEntries"
+                placeholder="🔍 Search entries..."
+              />
+              <select id="filterWeek">
+                <option value="">All Weeks</option>
+              </select>
+              <select id="filterType">
+                <option value="">All Types</option>
+                <option value="week">Weekly Summary</option>
+                <option value="orientation">Class Orientation</option>
+                <option value="day">Daily Learning</option>
+                <option value="lab">Lab Exercise</option>
+                <option value="assignment">Assignment</option>
+                <option value="exam">Exam/Quiz</option>
+                <option value="project">Project Work</option>
+                <option value="research">Research/Reading</option>
+              </select>
+            </div>
+
+            <div id="entriesContainer">
+              <div class="no-entries">
+                📝 No entries yet. Start documenting your learning journey!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Lesson Overview Section -->
+      <section id="overview" class="section">
+        <h2>📋 Weekly & Daily Learning Overview</h2>
 
         <div class="card">
-          <h3>What is System Administration?</h3>
+          <h3>Your Learning Progress</h3>
           <p>
-            System Administration is the field of IT that involves managing,
-            configuring, and maintaining computer systems and networks. System
-            administrators ensure that technology infrastructure runs smoothly,
-            securely, and efficiently.
+            Track your actual progress through the weekly lessons and daily
+            activities in IT401 System Administration and Maintenance based on
+            your diary entries.
           </p>
         </div>
 
         <div class="card">
-          <h3>Key Responsibilities</h3>
-          <ul class="checklist">
-            <li>Server installation, configuration, and maintenance</li>
-            <li>User account management and access control</li>
-            <li>Network configuration and troubleshooting</li>
-            <li>System monitoring and performance optimization</li>
-            <li>Backup and disaster recovery planning</li>
-            <li>Security implementation and maintenance</li>
-            <li>Software installation and updates</li>
-            <li>Documentation and policy creation</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <h3>Learning Journey Timeline</h3>
-          <div class="timeline">
-            <div class="timeline-item">
-              <h4>Weeks 1-2: Fundamentals</h4>
-              <p>
-                Learn basic concepts, hardware understanding, and operating
-                system basics
-              </p>
-            </div>
-            <div class="timeline-item">
-              <h4>Weeks 3-6: Linux Administration</h4>
-              <p>
-                Master command line, file systems, user management, and services
-              </p>
-            </div>
-            <div class="timeline-item">
-              <h4>Weeks 7-10: Windows Administration</h4>
-              <p>
-                Learn Active Directory, PowerShell, and Windows Server
-                management
-              </p>
-            </div>
-            <div class="timeline-item">
-              <h4>Weeks 11-12: Networking & Security</h4>
-              <p>
-                Network configuration, firewalls, and security best practices
-              </p>
-            </div>
-            <div class="timeline-item">
-              <h4>Weeks 13-14: Cloud & Modern Tools</h4>
-              <p>Cloud platforms, automation, and monitoring tools</p>
-            </div>
-            <div class="timeline-item">
-              <h4>Weeks 15-16: Project & Career Prep</h4>
-              <p>Capstone project and career preparation</p>
+          <h3>Your Learning Journey</h3>
+          <div id="learningOverview" class="timeline">
+            <div class="no-entries">
+              📝 No learning entries yet. Start documenting your journey in the
+              Learning Diary tab!
             </div>
           </div>
         </div>
       </section>
-
-      <!-- Fundamentals Section -->
-      <section id="fundamentals" class="section">
-        <h2>🔧 System Administration Fundamentals</h2>
-
-        <div class="card">
-          <h3>Hardware Fundamentals</h3>
-          <div class="skills-grid">
-            <div class="skill-item">
-              <h4>CPU & Memory</h4>
-              <p>Understanding processors, RAM, and performance metrics</p>
-              <div class="progress-bar">
-                <div class="progress" style="width: 90%"></div>
-              </div>
-            </div>
-            <div class="skill-item">
-              <h4>Storage Systems</h4>
-              <p>HDDs, SSDs, RAID configurations, and storage management</p>
-              <div class="progress-bar">
-                <div class="progress" style="width: 85%"></div>
-              </div>
-            </div>
-            <div class="skill-item">
-              <h4>Network Hardware</h4>
-              <p>Switches, routers, cables, and network interfaces</p>
-              <div class="progress-bar">
-                <div class="progress" style="width: 80%"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Operating System Concepts</h3>
-          <ul class="checklist">
-            <li>Process management and scheduling</li>
-            <li>Memory management and virtual memory</li>
-            <li>File systems and storage management</li>
-            <li>Device drivers and hardware interaction</li>
-            <li>System calls and APIs</li>
-            <li>Multi-user and multi-tasking environments</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <h3>Essential Concepts</h3>
-          <h4>Virtualization</h4>
-          <p>
-            Understanding virtual machines, hypervisors, and containerization
-            technologies.
-          </p>
-
-          <div class="code-block">
-            # Basic VM management commands virsh list --all docker ps -a kubectl
-            get pods
-          </div>
-
-          <div class="tip">
-            <strong>💡 Tip:</strong> Start with VirtualBox or VMware Player to
-            practice virtualization concepts hands-on.
-          </div>
-        </div>
-      </section>
-
-      <!-- Linux Administration Section -->
-      <section id="linux" class="section">
-        <h2>🐧 Linux System Administration</h2>
-
-        <div class="card">
-          <h3>Command Line Mastery</h3>
-          <p>Essential commands every Linux administrator must know:</p>
-
-          <div class="code-block">
-            # File and Directory Operations ls -la # List files with details cd
-            /path/to/directory # Change directory mkdir -p /path/to/dir # Create
-            directory structure cp -r source destination # Copy
-            files/directories mv source destination # Move/rename files rm -rf
-            directory # Remove files/directories find /path -name "*.txt" # Find
-            files grep "pattern" file # Search in files # System Information top
-            # Process viewer ps aux # Process list df -h # Disk usage free -h #
-            Memory usage uname -a # System information uptime # System uptime
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>User and Permission Management</h3>
-
-          <div class="code-block">
-            # User Management sudo useradd -m username # Add user with home
-            directory sudo usermod -aG group user # Add user to group sudo
-            passwd username # Set user password sudo userdel -r username #
-            Delete user and home directory # Permission Management chmod 755
-            file # Set file permissions chown user:group file # Change file
-            ownership sudo su - username # Switch to user groups username # Show
-            user groups
-          </div>
-
-          <div class="warning">
-            <strong>⚠️ Warning:</strong> Always be cautious with sudo commands.
-            They can make system-wide changes that may affect system stability.
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>System Services and Processes</h3>
-
-          <div class="code-block">
-            # Systemd Service Management sudo systemctl start service_name #
-            Start service sudo systemctl stop service_name # Stop service sudo
-            systemctl restart service_name # Restart service sudo systemctl
-            enable service_name # Enable at boot sudo systemctl status
-            service_name # Check service status sudo systemctl list-units
-            --type=service # List all services # Process Management kill PID #
-            Terminate process killall process_name # Kill all instances nohup
-            command & # Run command in background jobs # List background jobs fg
-            %1 # Bring job to foreground
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Log Management</h3>
-
-          <div class="code-block">
-            # System Logs sudo journalctl -f # Follow system logs sudo
-            journalctl -u service_name # Service-specific logs tail -f
-            /var/log/syslog # Follow syslog grep "error" /var/log/messages #
-            Search for errors logrotate /etc/logrotate.conf # Rotate logs
-          </div>
-        </div>
-      </section>
-
-      <!-- Windows Administration Section -->
-      <section id="windows" class="section">
-        <h2>🪟 Windows System Administration</h2>
-
-        <div class="card">
-          <h3>PowerShell Fundamentals</h3>
-          <p>
-            PowerShell is the command-line shell and scripting language for
-            Windows administration:
-          </p>
-
-          <div class="code-block">
-            # Basic PowerShell Commands Get-Process # List running processes
-            Get-Service # List all services Get-EventLog -LogName System # View
-            system event log Get-WmiObject -Class Win32_ComputerSystem # System
-            information Get-LocalUser # List local users Get-LocalGroup # List
-            local groups # File Operations Get-ChildItem C:\ -Recurse # List
-            files recursively Copy-Item source destination # Copy files
-            Move-Item source destination # Move files Remove-Item path -Recurse
-            # Delete files/folders
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Active Directory Management</h3>
-
-          <div class="code-block">
-            # Active Directory PowerShell Commands Import-Module ActiveDirectory
-            # Load AD module # User Management New-ADUser -Name "John Doe"
-            -SamAccountName "jdoe" Get-ADUser -Filter * # List all users
-            Set-ADUser -Identity jdoe -Department "IT" Remove-ADUser -Identity
-            jdoe # Group Management New-ADGroup -Name "IT_Staff" -GroupScope
-            Global Add-ADGroupMember -Identity "IT_Staff" -Members "jdoe"
-            Get-ADGroupMember -Identity "IT_Staff" # Computer Management
-            Get-ADComputer -Filter * # List all computers
-            Reset-ComputerMachinePassword # Reset computer account
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Windows Server Management</h3>
-          <ul class="checklist">
-            <li>Server Roles and Features installation</li>
-            <li>IIS (Internet Information Services) configuration</li>
-            <li>DNS and DHCP server management</li>
-            <li>File and Print Services</li>
-            <li>Remote Desktop Services</li>
-            <li>Windows Update management (WSUS)</li>
-            <li>Group Policy management</li>
-            <li>Certificate Services</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <h3>Registry Management</h3>
-
-          <div class="code-block">
-            # Registry PowerShell Commands Get-ItemProperty -Path
-            "HKLM:\Software\Microsoft\Windows\CurrentVersion" Set-ItemProperty
-            -Path "HKCU:\Software\MyApp" -Name "Setting" -Value "Value"
-            New-ItemProperty -Path "HKLM:\Software\MyApp" -Name "NewSetting"
-            -Value "Data" Remove-ItemProperty -Path "HKCU:\Software\MyApp" -Name
-            "OldSetting"
-          </div>
-
-          <div class="warning">
-            <strong>⚠️ Warning:</strong> Always backup the registry before
-            making changes. Incorrect registry modifications can render Windows
-            unbootable.
-          </div>
-        </div>
-      </section>
-
-      <!-- Networking Section -->
-      <section id="networking" class="section">
-        <h2>🌐 Network Administration</h2>
-
-        <div class="card">
-          <h3>Network Fundamentals</h3>
-          <div class="skills-grid">
-            <div class="skill-item">
-              <h4>OSI Model</h4>
-              <p>7-layer network model understanding</p>
-              <div class="progress-bar">
-                <div class="progress" style="width: 95%"></div>
-              </div>
-            </div>
-            <div class="skill-item">
-              <h4>TCP/IP</h4>
-              <p>Protocol suite and addressing</p>
-              <div class="progress-bar">
-                <div class="progress" style="width: 90%"></div>
-              </div>
-            </div>
-            <div class="skill-item">
-              <h4>Subnetting</h4>
-              <p>Network segmentation and CIDR</p>
-              <div class="progress-bar">
-                <div class="progress" style="width: 85%"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Network Troubleshooting Commands</h3>
-
-          <div class="code-block">
-            # Network Diagnostics (Linux/Windows) ping 8.8.8.8 # Test
-            connectivity traceroute google.com (Linux) # Trace network path
-            tracert google.com (Windows) # Trace network path nslookup
-            domain.com # DNS lookup dig domain.com (Linux) # Advanced DNS lookup
-            netstat -tuln # Show network connections ss -tuln (Linux) # Modern
-            netstat alternative arp -a # Show ARP table route -n (Linux) # Show
-            routing table route print (Windows) # Show routing table
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Network Configuration</h3>
-
-          <h4>Linux Network Configuration</h4>
-          <div class="code-block">
-            # Network Interface Configuration ip addr show # Show IP addresses
-            ip route show # Show routing table ip link set eth0 up # Bring
-            interface up ip addr add 192.168.1.100/24 dev eth0 # Set IP address
-            # NetworkManager nmcli connection show # Show connections nmcli
-            device status # Show device status nmcli connection up
-            connection_name # Activate connection
-          </div>
-
-          <h4>Windows Network Configuration</h4>
-          <div class="code-block">
-            # Network Configuration Commands ipconfig /all # Show network
-            configuration ipconfig /release # Release IP address ipconfig /renew
-            # Renew IP address ipconfig /flushdns # Clear DNS cache netsh
-            interface ip set address "Local Area Connection" static
-            192.168.1.100 255.255.255.0 192.168.1.1
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>DNS and DHCP Management</h3>
-          <p>Essential services for network infrastructure:</p>
-          <ul class="checklist">
-            <li>DNS zone configuration and management</li>
-            <li>DHCP scope creation and management</li>
-            <li>DNS record types (A, AAAA, CNAME, MX, PTR)</li>
-            <li>Dynamic DNS updates</li>
-            <li>DHCP reservations and options</li>
-            <li>DNS forwarding and caching</li>
-          </ul>
-        </div>
-      </section>
-
-      <!-- Security Section -->
-      <section id="security" class="section">
-        <h2>🔒 System Security</h2>
-
-        <div class="card">
-          <h3>Security Fundamentals</h3>
-          <ul class="checklist">
-            <li>CIA Triad: Confidentiality, Integrity, Availability</li>
-            <li>Defense in depth strategy</li>
-            <li>Principle of least privilege</li>
-            <li>Risk assessment and management</li>
-            <li>Security policies and procedures</li>
-            <li>Incident response planning</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <h3>Firewall Configuration</h3>
-
-          <h4>Linux (iptables/ufw)</h4>
-          <div class="code-block">
-            # UFW (Uncomplicated Firewall) sudo ufw status # Check firewall
-            status sudo ufw enable # Enable firewall sudo ufw allow 22/tcp #
-            Allow SSH sudo ufw allow 80,443/tcp # Allow HTTP/HTTPS sudo ufw deny
-            from 192.168.1.100 # Block specific IP sudo ufw delete allow 80 #
-            Remove rule # iptables sudo iptables -L # List rules sudo iptables
-            -A INPUT -p tcp --dport 22 -j ACCEPT # Allow SSH sudo iptables -A
-            INPUT -j DROP # Drop all other traffic sudo iptables-save >
-            /etc/iptables/rules.v4 # Save rules
-          </div>
-
-          <h4>Windows Firewall</h4>
-          <div class="code-block">
-            # Windows Firewall PowerShell Commands Get-NetFirewallRule # List
-            firewall rules New-NetFirewallRule -DisplayName "Allow SSH"
-            -Direction Inbound -Protocol TCP -LocalPort 22 -Action Allow
-            Remove-NetFirewallRule -DisplayName "Block App"
-            Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled True
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>User Access Control</h3>
-
-          <div class="code-block">
-            # SSH Key Management ssh-keygen -t rsa -b 4096 # Generate SSH key
-            pair ssh-copy-id user@server # Copy public key to server ssh -i
-            ~/.ssh/private_key user@server # Connect with specific key # sudo
-            Configuration sudo visudo # Edit sudoers file safely # Add user to
-            sudoers: username ALL=(ALL:ALL) ALL
-          </div>
-
-          <div class="tip">
-            <strong>💡 Security Tip:</strong> Always use SSH keys instead of
-            passwords for server access, and disable root login via SSH.
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>System Hardening Checklist</h3>
-          <ul class="checklist">
-            <li>Keep systems updated with latest patches</li>
-            <li>Disable unnecessary services and ports</li>
-            <li>Configure strong password policies</li>
-            <li>Enable system logging and monitoring</li>
-            <li>Set up automated backups</li>
-            <li>Configure fail2ban for intrusion prevention</li>
-            <li>Enable SELinux/AppArmor (Linux)</li>
-            <li>Regular security audits and vulnerability scans</li>
-          </ul>
-        </div>
-      </section>
-
-      <!-- Cloud Section -->
-      <section id="cloud" class="section">
-        <h2>☁️ Cloud Administration</h2>
-
-        <div class="card">
-          <h3>Cloud Platforms Overview</h3>
-          <div class="skills-grid">
-            <div class="skill-item">
-              <h4>Amazon AWS</h4>
-              <p>EC2, S3, VPC, IAM, CloudFormation</p>
-              <div class="progress-bar">
-                <div class="progress" style="width: 80%"></div>
-              </div>
-            </div>
-            <div class="skill-item">
-              <h4>Microsoft Azure</h4>
-              <p>Virtual Machines, Storage, Virtual Networks</p>
-              <div class="progress-bar">
-                <div class="progress" style="width: 75%"></div>
-              </div>
-            </div>
-            <div class="skill-item">
-              <h4>Google Cloud</h4>
-              <p>Compute Engine, Cloud Storage, VPC</p>
-              <div class="progress-bar">
-                <div class="progress" style="width: 70%"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Infrastructure as Code</h3>
-
-          <div class="code-block">
-            # Terraform Example provider "aws" { region = "us-west-2" } resource
-            "aws_instance" "web_server" { ami = "ami-0c55b159cbfafe1d0"
-            instance_type = "t2.micro" key_name = "my-key-pair" tags = { Name =
-            "WebServer" } } # Apply infrastructure terraform init terraform plan
-            terraform apply
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Container Management</h3>
-
-          <div class="code-block">
-            # Docker Commands docker run -d -p 80:80 nginx # Run nginx container
-            docker ps # List running containers docker images # List available
-            images docker stop container_id # Stop container docker rm
-            container_id # Remove container docker build -t myapp . # Build
-            image from Dockerfile # Kubernetes Commands kubectl get pods # List
-            pods kubectl get services # List services kubectl apply -f
-            deployment.yaml # Apply configuration kubectl logs pod_name # View
-            pod logs kubectl exec -it pod_name /bin/bash # Execute commands in
-            pod
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Cloud Security Best Practices</h3>
-          <ul class="checklist">
-            <li>Use IAM roles and policies for access control</li>
-            <li>Enable multi-factor authentication (MFA)</li>
-            <li>Encrypt data at rest and in transit</li>
-            <li>Regular security audits and compliance checks</li>
-            <li>Monitor cloud resource usage and costs</li>
-            <li>Implement proper network segmentation</li>
-            <li>Use managed services when possible</li>
-            <li>Maintain proper backup and disaster recovery</li>
-          </ul>
-        </div>
-      </section>
-
-      <!-- Tools Section -->
-      <section id="tools" class="section">
-        <h2>🛠️ Administration Tools</h2>
-
-        <div class="card">
-          <h3>Monitoring and Management Tools</h3>
-
-          <div class="skills-grid">
-            <div class="skill-item">
-              <h4>Nagios</h4>
-              <p>Network and infrastructure monitoring</p>
-            </div>
-            <div class="skill-item">
-              <h4>Zabbix</h4>
-              <p>Enterprise monitoring solution</p>
-            </div>
-            <div class="skill-item">
-              <h4>Prometheus</h4>
-              <p>Time-series monitoring and alerting</p>
-            </div>
-            <div class="skill-item">
-              <h4>Grafana</h4>
-              <p>Data visualization and dashboards</p>
-            </div>
-            <div class="skill-item">
-              <h4>ELK Stack</h4>
-              <p>Elasticsearch, Logstash, Kibana for logging</p>
-            </div>
-            <div class="skill-item">
-              <h4>Ansible</h4>
-              <p>Configuration management and automation</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Automation with Ansible</h3>
-
-          <div class="code-block">
-            # Ansible Playbook Example --- - name: Configure web servers hosts:
-            webservers become: yes tasks: - name: Install nginx apt: name: nginx
-            state: present update_cache: yes - name: Start nginx service
-            service: name: nginx state: started enabled: yes - name: Copy
-            website files copy: src: /local/path/index.html dest:
-            /var/www/html/index.html owner: www-data group: www-data mode:
-            '0644' # Run playbook ansible-playbook -i inventory webserver.yml
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Version Control with Git</h3>
-
-          <div class="code-block">
-            # Git Commands for Infrastructure Code git init # Initialize
-            repository git add . # Stage all changes git commit -m "Initial
-            configuration" # Commit changes git branch feature-branch # Create
-            new branch git checkout feature-branch # Switch to branch git merge
-            feature-branch # Merge branch git push origin main # Push to remote
-            repository git pull origin main # Pull latest changes git log
-            --oneline # View commit history
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Backup and Recovery Tools</h3>
-          <ul class="checklist">
-            <li>rsync for file synchronization</li>
-            <li>tar for archive creation</li>
-            <li>Bacula for enterprise backup</li>
-            <li>Veeam for virtual machine backup</li>
-            <li>AWS S3 for cloud storage</li>
-            <li>MySQL/PostgreSQL dump utilities</li>
-            <li>LVM snapshots for consistent backups</li>
-            <li>Regular backup testing and validation</li>
-          </ul>
-        </div>
-      </section>
-
-      <!-- Career Path Section -->
-      <section id="career" class="section">
-        <h2>📈 Career Development Path</h2>
-
-        <div class="card">
-          <h3>Career Progression Timeline</h3>
-          <div class="timeline">
-            <div class="timeline-item">
-              <h4>Entry Level (0-2 years)</h4>
-              <strong
-                >Junior System Administrator / IT Support Specialist</strong
-              >
-              <p>
-                Focus on: Basic troubleshooting, user support, system
-                monitoring, documentation
-              </p>
-              <p><strong>Salary Range:</strong> $35,000 - $50,000</p>
-            </div>
-            <div class="timeline-item">
-              <h4>Mid Level (2-5 years)</h4>
-              <strong>System Administrator / Network Administrator</strong>
-              <p>
-                Focus on: Server management, network configuration, security
-                implementation, automation
-              </p>
-              <p><strong>Salary Range:</strong> $50,000 - $75,000</p>
-            </div>
-            <div class="timeline-item">
-              <h4>Senior Level (5-8 years)</h4>
-              <strong
-                >Senior System Administrator / Infrastructure Engineer</strong
-              >
-              <p>
-                Focus on: Architecture design, cloud migration, team leadership,
-                strategic planning
-              </p>
-              <p><strong>Salary Range:</strong> $75,000 - $100,000</p>
-            </div>
-            <div class="timeline-item">
-              <h4>Expert Level (8+ years)</h4>
-              <strong>IT Manager / DevOps Engineer / Cloud Architect</strong>
-              <p>
-                Focus on: Team management, enterprise solutions, digital
-                transformation, innovation
-              </p>
-              <p><strong>Salary Range:</strong> $100,000 - $150,000+</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Essential Certifications</h3>
-
-          <div class="skills-grid">
-            <div class="skill-item">
-              <h4>CompTIA</h4>
-              <p>A+, Network+, Security+, Server+</p>
-              <small>Entry to mid-level certifications</small>
-            </div>
-            <div class="skill-item">
-              <h4>Microsoft</h4>
-              <p>MCSA, MCSE, Azure certifications</p>
-              <small>Windows and cloud focus</small>
-            </div>
-            <div class="skill-item">
-              <h4>Red Hat</h4>
-              <p>RHCSA, RHCE, RHCA</p>
-              <small>Linux administration expertise</small>
-            </div>
-            <div class="skill-item">
-              <h4>AWS</h4>
-              <p>Solutions Architect, SysOps Administrator</p>
-              <small>Cloud platform specialization</small>
-            </div>
-            <div class="skill-item">
-              <h4>Cisco</h4>
-              <p>CCNA, CCNP, CCIE</p>
-              <small>Networking specialization</small>
-            </div>
-            <div class="skill-item">
-              <h4>VMware</h4>
-              <p>VCP, VCAP, VCDX</p>
-              <small>Virtualization expertise</small>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Building Your Professional Profile</h3>
-          <ul class="checklist">
-            <li>Create a strong LinkedIn profile</li>
-            <li>Build a portfolio of projects on GitHub</li>
-            <li>Contribute to open-source projects</li>
-            <li>Write technical blog posts</li>
-            <li>Attend local IT meetups and conferences</li>
-            <li>Join professional organizations (USENIX, LISA)</li>
-            <li>Obtain relevant certifications</li>
-            <li>Build a home lab for experimentation</li>
-            <li>Stay updated with industry trends</li>
-            <li>Develop soft skills (communication, leadership)</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <h3>Interview Preparation</h3>
-          <h4>Common Technical Questions:</h4>
-          <ul>
-            <li>Describe the boot process of a Linux/Windows system</li>
-            <li>How would you troubleshoot a server that won't boot?</li>
-            <li>Explain the difference between TCP and UDP</li>
-            <li>How do you secure a web server?</li>
-            <li>Describe your backup and disaster recovery strategy</li>
-            <li>How would you handle a security incident?</li>
-            <li>Explain virtualization and its benefits</li>
-            <li>How do you monitor system performance?</li>
-          </ul>
-        </div>
-      </section>
-
-      <footer class="footer">
-        <h3>🎓 IT401 System Administration Journey</h3>
-        <p>
-          Complete documentation and learning path for aspiring system
-          administrators
-        </p>
-        <p>
-          <strong>Remember:</strong> Practice regularly, stay curious, and never
-          stop learning!
-        </p>
-        <p><em>Last updated: August 2025</em></p>
-      </footer>
     </div>
 
-    <script>
-      function showSection(sectionId) {
-        // Hide all sections
-        const sections = document.querySelectorAll(".section");
-        sections.forEach((section) => {
-          section.classList.remove("active");
-        });
-
-        // Show selected section
-        document.getElementById(sectionId).classList.add("active");
-
-        // Update navigation buttons
-        const buttons = document.querySelectorAll(".nav-btn");
-        buttons.forEach((button) => {
-          button.style.background = "#3498db";
-        });
-
-        // Highlight active button
-        event.target.style.background = "#2980b9";
-
-        // Scroll to top
-        window.scrollTo(0, 0);
-      }
-
-      // Add some interactivity for progress bars
-      window.addEventListener("load", function () {
-        const progressBars = document.querySelectorAll(".progress");
-        progressBars.forEach((bar) => {
-          const width = bar.style.width;
-          bar.style.width = "0%";
-          setTimeout(() => {
-            bar.style.width = width;
-          }, 500);
-        });
-      });
-
-      // Add keyboard navigation
-      document.addEventListener("keydown", function (e) {
-        const sections = [
-          "overview",
-          "fundamentals",
-          "linux",
-          "windows",
-          "networking",
-          "security",
-          "cloud",
-          "tools",
-          "career",
-        ];
-        const currentSection = document.querySelector(".section.active").id;
-        const currentIndex = sections.indexOf(currentSection);
-
-        if (e.key === "ArrowRight" && currentIndex < sections.length - 1) {
-          showSection(sections[currentIndex + 1]);
-        } else if (e.key === "ArrowLeft" && currentIndex > 0) {
-          showSection(sections[currentIndex - 1]);
-        }
-      });
-    </script>
+    <script src="script.js"></script>
   </body>
 </html>
