@@ -1,13 +1,24 @@
 // Learning Diary Management
 let diaryEntries = [];
 
-// Load diary data from localStorage on page load
-document.addEventListener("DOMContentLoaded", function () {
-  loadDiaryData();
-  updateStats();
-  populateWeekFilter();
-  displayEntries();
-  updateLearningOverview(); // Add this to update overview on load
+// Load diary data from Firebase/localStorage on page load and initialize app
+document.addEventListener("DOMContentLoaded", async function () {
+  try {
+    // Initialize modern form features first
+    initializeModernForm();
+
+    // Load data from Firebase/localStorage
+    await loadDiaryData();
+
+    // Update UI components after data is loaded
+    updateStats();
+    populateWeekFilter();
+    displayEntries();
+    updateLearningOverview();
+  } catch (error) {
+    console.error("Error initializing application:", error);
+    showNotification("❌ Error loading application data", "error");
+  }
 });
 
 // Search and filter handlers
@@ -106,20 +117,14 @@ function addDiaryEntry() {
   }
 
   saveDiaryData();
-  updateStats();
-  populateWeekFilter();
-  displayEntries();
-  updateLearningOverview();
+  refreshUI();
 }
 
 function deleteDiaryEntry(id) {
   if (confirm("Are you sure you want to delete this entry?")) {
     diaryEntries = diaryEntries.filter((entry) => entry.id !== id);
     saveDiaryData();
-    updateStats();
-    populateWeekFilter();
-    displayEntries();
-    updateLearningOverview(); // Add this to update overview when entry is deleted
+    refreshUI();
     showNotification("🗑️ Entry deleted successfully!", "info");
   }
 }
@@ -267,6 +272,11 @@ function resetFormAppearance() {
 }
 
 function displayEntries() {
+  console.log(
+    "displayEntries called with",
+    diaryEntries.length,
+    "total entries"
+  );
   const container = document.getElementById("entriesContainer");
   const searchTerm = document
     .getElementById("searchEntries")
@@ -288,9 +298,16 @@ function displayEntries() {
   // Sort by date (newest first)
   filteredEntries.sort((a, b) => b.timestamp - a.timestamp);
 
+  console.log(
+    "displayEntries: showing",
+    filteredEntries.length,
+    "filtered entries"
+  );
+
   if (filteredEntries.length === 0) {
     container.innerHTML =
       '<div class="no-entries">📝 No entries found matching your criteria.</div>';
+    console.log("displayEntries: no entries to display");
     return;
   }
 
@@ -449,17 +466,25 @@ function filterEntries() {
 
 async function saveDiaryData() {
   try {
-    const userId = "defaultUser"; // could replace with login later
-    const docRef = window.firebaseDoc(window.firebaseDb, "diaries", userId);
-    await window.firebaseSetDoc(docRef, {
-      entries: diaryEntries,
-    });
-    showNotification("✅ Saved to cloud!", "success");
+    // Always save to localStorage first as backup
+    localStorage.setItem("diaryEntries", JSON.stringify(diaryEntries));
+
+    // Then try to save to Firebase
+    if (window.firebaseDb) {
+      const userId = "defaultUser"; // could replace with login later
+      const docRef = window.firebaseDoc(window.firebaseDb, "diaries", userId);
+      await window.firebaseSetDoc(docRef, {
+        entries: diaryEntries,
+      });
+      showNotification("✅ Saved to cloud!", "success");
+    } else {
+      console.log("Firebase not available, data saved to localStorage only");
+      showNotification("💾 Saved locally!", "info");
+    }
   } catch (error) {
     console.error("Error saving to Firebase: ", error);
     showNotification("❌ Error saving to cloud!", "error");
-    // Fallback to localStorage if Firebase fails
-    localStorage.setItem("diaryEntries", JSON.stringify(diaryEntries));
+    // Data is already in localStorage from the first line
     showNotification("💾 Saved locally as backup", "info");
   }
 }
@@ -479,15 +504,18 @@ async function loadDiaryData() {
 
       if (docSnap.exists()) {
         diaryEntries = docSnap.data().entries || [];
+        console.log("Firebase data loaded:", diaryEntries.length, "entries");
         showNotification("☁️ Loaded from cloud!", "info");
       } else {
         // Try loading from localStorage as fallback
         const localData = localStorage.getItem("diaryEntries");
         if (localData) {
           diaryEntries = JSON.parse(localData);
+          console.log("Local data loaded:", diaryEntries.length, "entries");
           showNotification("💾 Loaded from local storage", "info");
         } else {
           diaryEntries = [];
+          console.log("No data found, starting with empty array");
         }
       }
     } else {
@@ -502,14 +530,33 @@ async function loadDiaryData() {
       const localData = localStorage.getItem("diaryEntries");
       if (localData) {
         diaryEntries = JSON.parse(localData);
+        console.log(
+          "Fallback: Local data loaded:",
+          diaryEntries.length,
+          "entries"
+        );
         showNotification("💾 Loaded from local storage", "info");
       } else {
         diaryEntries = [];
+        console.log("Fallback: No local data found, starting with empty array");
       }
     } catch (localError) {
       console.error("Error loading from localStorage: ", localError);
       diaryEntries = [];
     }
+  }
+
+  // After loading data, refresh the UI components if they exist
+  refreshUI();
+}
+
+// Refresh all UI components
+function refreshUI() {
+  if (document.getElementById("entriesContainer")) {
+    updateStats();
+    populateWeekFilter();
+    displayEntries();
+    updateLearningOverview();
   }
 }
 
@@ -542,9 +589,7 @@ document.getElementById("importFile").addEventListener("change", function (e) {
           if (confirm("This will replace your current diary data. Continue?")) {
             diaryEntries = importedData;
             saveDiaryData();
-            updateStats();
-            populateWeekFilter();
-            displayEntries();
+            refreshUI();
             showNotification("📥 Diary imported successfully!", "success");
           }
         } else {
@@ -612,9 +657,12 @@ function showSection(sectionId) {
   // Highlight active button
   event.target.classList.add("active");
 
-  // Update learning overview if showing overview section
+  // Update sections when shown
   if (sectionId === "overview") {
     updateLearningOverview();
+  } else if (sectionId === "diary") {
+    // Refresh diary section
+    refreshUI();
   }
 
   // Scroll to top
@@ -906,14 +954,14 @@ function getTypeIcon(type) {
   return icons[type] || "📚";
 }
 
+// Week number initialization (commented out to let user choose freely)
 // Initialize week number with current week
-document.addEventListener("DOMContentLoaded", function () {
-  // Don't auto-set week number - let user choose freely
-  // const weekNumberInput = document.getElementById("weekNumber");
-  // if (weekNumberInput) {
-  //   weekNumberInput.value = getCurrentWeek();
-  // }
-});
+// document.addEventListener("DOMContentLoaded", function () {
+//   const weekNumberInput = document.getElementById("weekNumber");
+//   if (weekNumberInput) {
+//     weekNumberInput.value = getCurrentWeek();
+//   }
+// });
 
 // Add CSS for notification animations
 const style = document.createElement("style");
@@ -961,10 +1009,7 @@ style.textContent = `
     `;
 document.head.appendChild(style);
 
-// Modern Form Enhancements
-document.addEventListener("DOMContentLoaded", function () {
-  initializeModernForm();
-});
+// Modern Form Enhancements (initialized in main DOMContentLoaded)
 
 function initializeModernForm() {
   // Character counters
