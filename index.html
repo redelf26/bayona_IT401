@@ -458,6 +458,25 @@ Linux commands, File permissions, Network configuration, System administration, 
       </section>
     </div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
+
+    <script>
+      // Replace with your Firebase config from console
+      const firebaseConfig = {
+        apiKey: "AIzaSyDZ12v4b61_8D5U8NFW0fJSBPq5o_Vaag8",
+        authDomain: "it401-lessondocs.firebaseapp.com",
+        projectId: "it401-lessondocs",
+        storageBucket: "it401-lessondocs.firebasestorage.app",
+        messagingSenderId: "337403223589",
+        appId: "1:337403223589:web:0b6be7b67936d55b2e29cc",
+      };
+
+      firebase.initializeApp(firebaseConfig);
+      var db = firebase.firestore();
+    </script>
+
     <script src="script.js"></script>
   </body>
 </html>

@@ -447,14 +447,32 @@ function filterEntries() {
   displayEntries();
 }
 
-function saveDiaryData() {
-  localStorage.setItem("it401_diary", JSON.stringify(diaryEntries));
+async function saveDiaryData() {
+  try {
+    const userId = "defaultUser"; // could replace with login later
+    await db.collection("diaries").doc(userId).set({
+      entries: diaryEntries,
+    });
+    showNotification("✅ Saved to cloud!", "success");
+  } catch (error) {
+    console.error("Error saving to Firebase: ", error);
+    showNotification("❌ Error saving to cloud!", "error");
+  }
 }
 
-function loadDiaryData() {
-  const saved = localStorage.getItem("it401_diary");
-  if (saved) {
-    diaryEntries = JSON.parse(saved);
+async function loadDiaryData() {
+  try {
+    const userId = "defaultUser";
+    const doc = await db.collection("diaries").doc(userId).get();
+    if (doc.exists) {
+      diaryEntries = doc.data().entries || [];
+      showNotification("☁️ Loaded from cloud!", "info");
+    } else {
+      diaryEntries = [];
+    }
+  } catch (error) {
+    console.error("Error loading from Firebase: ", error);
+    showNotification("❌ Error loading from cloud!", "error");
   }
 }
 
