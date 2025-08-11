@@ -450,29 +450,66 @@ function filterEntries() {
 async function saveDiaryData() {
   try {
     const userId = "defaultUser"; // could replace with login later
-    await db.collection("diaries").doc(userId).set({
+    const docRef = window.firebaseDoc(window.firebaseDb, "diaries", userId);
+    await window.firebaseSetDoc(docRef, {
       entries: diaryEntries,
     });
     showNotification("✅ Saved to cloud!", "success");
   } catch (error) {
     console.error("Error saving to Firebase: ", error);
     showNotification("❌ Error saving to cloud!", "error");
+    // Fallback to localStorage if Firebase fails
+    localStorage.setItem("diaryEntries", JSON.stringify(diaryEntries));
+    showNotification("💾 Saved locally as backup", "info");
   }
 }
 
 async function loadDiaryData() {
   try {
-    const userId = "defaultUser";
-    const doc = await db.collection("diaries").doc(userId).get();
-    if (doc.exists) {
-      diaryEntries = doc.data().entries || [];
-      showNotification("☁️ Loaded from cloud!", "info");
+    // Wait for Firebase to be initialized
+    if (!window.firebaseDb) {
+      // If Firebase is not ready, wait a bit and try again
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+
+    if (window.firebaseDb) {
+      const userId = "defaultUser";
+      const docRef = window.firebaseDoc(window.firebaseDb, "diaries", userId);
+      const docSnap = await window.firebaseGetDoc(docRef);
+
+      if (docSnap.exists()) {
+        diaryEntries = docSnap.data().entries || [];
+        showNotification("☁️ Loaded from cloud!", "info");
+      } else {
+        // Try loading from localStorage as fallback
+        const localData = localStorage.getItem("diaryEntries");
+        if (localData) {
+          diaryEntries = JSON.parse(localData);
+          showNotification("💾 Loaded from local storage", "info");
+        } else {
+          diaryEntries = [];
+        }
+      }
     } else {
-      diaryEntries = [];
+      throw new Error("Firebase not initialized");
     }
   } catch (error) {
     console.error("Error loading from Firebase: ", error);
     showNotification("❌ Error loading from cloud!", "error");
+
+    // Fallback to localStorage
+    try {
+      const localData = localStorage.getItem("diaryEntries");
+      if (localData) {
+        diaryEntries = JSON.parse(localData);
+        showNotification("💾 Loaded from local storage", "info");
+      } else {
+        diaryEntries = [];
+      }
+    } catch (localError) {
+      console.error("Error loading from localStorage: ", localError);
+      diaryEntries = [];
+    }
   }
 }
 
