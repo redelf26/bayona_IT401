@@ -4,6 +4,8 @@ let diaryEntries = [];
 // Load diary data from Firebase/localStorage on page load and initialize app
 document.addEventListener("DOMContentLoaded", async function () {
   try {
+    // Initialize theme first so UI renders correctly
+    initTheme();
     // Initialize modern form features first
     initializeModernForm();
 
@@ -20,6 +22,37 @@ document.addEventListener("DOMContentLoaded", async function () {
     showNotification("❌ Error loading application data", "error");
   }
 });
+
+// Theme setup (light/dark)
+function initTheme() {
+  try {
+    const root = document.documentElement;
+    const saved = localStorage.getItem("theme");
+    const prefersDark =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const theme = saved || (prefersDark ? "dark" : "light");
+
+    if (theme === "dark") root.setAttribute("data-theme", "dark");
+    else root.removeAttribute("data-theme");
+
+    const switchEl = document.getElementById("themeSwitch");
+    if (switchEl) {
+      switchEl.checked = theme === "dark";
+      switchEl.addEventListener("change", (e) => {
+        if (e.target.checked) {
+          root.setAttribute("data-theme", "dark");
+          localStorage.setItem("theme", "dark");
+        } else {
+          root.removeAttribute("data-theme");
+          localStorage.setItem("theme", "light");
+        }
+      });
+    }
+  } catch (err) {
+    console.warn("Theme init failed", err);
+  }
+}
 
 // Search and filter handlers
 document

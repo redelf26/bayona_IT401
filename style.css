@@ -1287,3 +1287,287 @@ select.form-input::-ms-expand {
     padding: 15px;
   }
 }
+
+/* ========== Modern Redesign: Variables, Theme, Overrides ========== */
+:root {
+  --brand: #4f46e5; /* Indigo 600 */
+  --brand-700: #4338ca;
+  --brand-800: #3730a3;
+  --accent: #06b6d4; /* Cyan 500 */
+
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+
+  --bg: #f6f7fb;
+  --panel: #ffffff;
+  --muted: #f2f4f8;
+  --border: #e5e7eb;
+  --text: #0f172a;
+  --text-muted: #475569;
+
+  --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+[data-theme="dark"] {
+  --bg: #0b1220;
+  --panel: #0f172a;
+  --muted: #0b1220;
+  --border: #1f2937;
+  --text: #e5e7eb;
+  --text-muted: #94a3b8;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* Body background upgrade */
+body {
+  background: radial-gradient(
+      1200px 600px at 20% -10%,
+      rgba(79, 70, 229, 0.18),
+      transparent
+    ),
+    radial-gradient(
+      1000px 500px at 100% 0%,
+      rgba(6, 182, 212, 0.18),
+      transparent
+    ),
+    var(--bg);
+  color: var(--text);
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu,
+    Cantarell, Noto Sans, Helvetica Neue, Arial, "Apple Color Emoji",
+    "Segoe UI Emoji";
+}
+
+/* Container and header polish */
+.container {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+}
+
+header {
+  background: linear-gradient(
+    135deg,
+    rgba(79, 70, 229, 0.08),
+    rgba(6, 182, 212, 0.08)
+  );
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+h1 {
+  font-family: Poppins, Segoe UI, sans-serif;
+  letter-spacing: -0.4px;
+}
+.subtitle {
+  color: var(--text-muted);
+}
+
+/* Navigation modern look */
+.navigation {
+  background: var(--muted);
+  border: 1px solid var(--border);
+}
+.nav-btn {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.nav-btn:hover {
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+.nav-btn.active {
+  background: var(--brand);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 8px 24px rgba(79, 70, 229, 0.35);
+}
+
+/* Cards */
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+/* Forms */
+.form-section {
+  background: var(--muted);
+  border: 1px solid var(--border);
+}
+.form-label {
+  color: var(--text);
+}
+.form-input,
+.form-textarea {
+  background: var(--panel);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+}
+.form-input:focus,
+.form-textarea:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
+}
+.error-message {
+  color: var(--danger);
+}
+.help-text,
+.char-counter {
+  color: var(--text-muted);
+}
+
+/* Buttons */
+.btn {
+  background: var(--brand);
+}
+.btn:hover {
+  box-shadow: 0 10px 22px rgba(79, 70, 229, 0.28);
+}
+.btn-secondary {
+  background: var(--brand);
+}
+.btn-secondary:hover {
+  background: var(--brand-700);
+}
+.btn-danger {
+  background: var(--danger);
+}
+.btn-danger:hover {
+  background: #dc2626;
+}
+.btn-edit {
+  background: var(--warning);
+}
+.btn-edit:hover {
+  background: #d97706;
+}
+.btn-primary {
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+  border-radius: 12px;
+  font-weight: 700;
+}
+.btn-primary:hover {
+  box-shadow: 0 12px 26px rgba(34, 197, 94, 0.28);
+}
+
+/* Panels */
+.diary-form,
+.diary-entries {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+.diary-entry {
+  background: var(--muted);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+.diary-meta {
+  background: rgba(79, 70, 229, 0.08);
+  border-left: 3px solid var(--brand);
+  color: var(--text-muted);
+}
+.diary-content {
+  background: var(--panel);
+  border-radius: 12px;
+}
+
+/* Topics */
+.topic-tag {
+  background: linear-gradient(135deg, var(--brand), var(--brand-700));
+}
+.mini-topic-tag {
+  color: var(--brand);
+  border-color: rgba(79, 70, 229, 0.28);
+}
+
+/* Overview */
+.day-summary {
+  background: rgba(79, 70, 229, 0.05);
+  border-left-color: var(--brand);
+}
+.overview-entry {
+  background: var(--panel);
+  border: 1px solid var(--border);
+}
+.overview-content {
+  background: var(--muted);
+}
+.lesson-date {
+  background: var(--muted);
+}
+.entry-type-badge.day {
+  background: linear-gradient(135deg, var(--brand), var(--brand-700));
+}
+
+/* Collapsibles */
+.week-header {
+  background: linear-gradient(135deg, var(--brand), var(--brand-700));
+}
+.week-header:hover {
+  background: linear-gradient(135deg, var(--brand-700), var(--brand-800));
+}
+.day-header {
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+}
+.day-header:hover {
+  background: linear-gradient(135deg, #15803d, #16a34a);
+}
+.content-toggle-header {
+  background: linear-gradient(135deg, #64748b, #475569);
+}
+.content-toggle-header:hover {
+  background: linear-gradient(135deg, #475569, #334155);
+}
+.collapsible-content {
+  background: var(--panel);
+}
+
+/* Theme toggle */
+.header-toolbar {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-toggle input {
+  display: none;
+}
+.theme-toggle-label {
+  width: 56px;
+  height: 30px;
+  border-radius: 999px;
+  position: relative;
+  cursor: pointer;
+  background: var(--muted);
+  border: 1px solid var(--border);
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px;
+  color: var(--text-muted);
+}
+.theme-toggle-label:after {
+  content: "";
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--panel);
+  top: 50%;
+  transform: translate(0, -50%);
+  left: 3px;
+  box-shadow: var(--shadow);
+  transition: left 0.25s ease;
+}
+#themeSwitch:checked + .theme-toggle-label:after {
+  left: 29px;
+}
