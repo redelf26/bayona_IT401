@@ -1,485 +1,529 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="theme-color" content="#111827" />
     <title>IT401 System Administration & Learning Diary</title>
-    <!-- Modern fonts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              mono: [
+                "JetBrains Mono",
+                "Fira Code",
+                "Monaco",
+                "Consolas",
+                "monospace",
+              ],
+            },
+            colors: {
+              tech: {
+                50: "#f0f9ff",
+                100: "#e0f2fe",
+                200: "#bae6fd",
+                300: "#7dd3fc",
+                400: "#38bdf8",
+                500: "#0ea5e9",
+                600: "#0284c7",
+                700: "#0369a1",
+                800: "#075985",
+                900: "#0c4a6e",
+              },
+              cyber: {
+                50: "#ecfdf5",
+                100: "#d1fae5",
+                200: "#a7f3d0",
+                300: "#6ee7b7",
+                400: "#34d399",
+                500: "#10b981",
+                600: "#059669",
+                700: "#047857",
+                800: "#065f46",
+                900: "#064e3b",
+              },
+            },
+          },
+        },
+      };
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="style.css" />
   </head>
-  <body>
-    <div class="container">
-      <header>
-        <h1>📚 IT401 System Administration & Maintenance</h1>
-        <p class="subtitle">Learning Journey & Documentation</p>
-        <div class="header-toolbar" aria-label="Display options">
-          <div class="theme-toggle">
-            <input
-              type="checkbox"
-              id="themeSwitch"
-              aria-label="Toggle dark mode"
-            />
-            <label for="themeSwitch" class="theme-toggle-label">
-              <span class="icon-sun" aria-hidden="true">🌞</span>
-              <span class="icon-moon" aria-hidden="true">🌙</span>
-            </label>
+  <body
+    class="h-full bg-gray-50 dark:bg-gray-900 transition-colors duration-300"
+  >
+    <!-- Main Container -->
+    <div class="min-h-full">
+      <!-- Header -->
+      <header
+        class="bg-white dark:bg-gray-800 shadow-lg border-b border-gray-200 dark:border-gray-700"
+      >
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex justify-between items-center py-6">
+            <div class="flex items-center space-x-4">
+              <div
+                class="w-10 h-10 bg-gradient-to-r from-tech-500 to-cyber-500 rounded-lg flex items-center justify-center"
+              >
+                <span class="text-white text-xl font-bold">💻</span>
+              </div>
+              <div>
+                <h1
+                  class="text-2xl font-bold text-gray-900 dark:text-white font-mono"
+                >
+                  IT401 SysAdmin
+                </h1>
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                  Learning Journey & Documentation
+                </p>
+              </div>
+            </div>
+
+            <!-- Theme Toggle -->
+            <button
+              id="themeToggle"
+              class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+              aria-label="Toggle theme"
+            >
+              <svg
+                class="w-5 h-5 dark:hidden"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <svg
+                class="w-5 h-5 hidden dark:block"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
+                ></path>
+              </svg>
+            </button>
           </div>
         </div>
       </header>
 
-      <nav class="navigation">
-        <button class="nav-btn active" onclick="showSection('diary')">
-          📝 Learning Diary
-        </button>
-        <button class="nav-btn" onclick="showSection('overview')">
-          📋 Lesson Overview
-        </button>
+      <!-- Navigation -->
+      <nav
+        class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700"
+      >
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex space-x-8">
+            <button
+              class="nav-tab active-tab border-b-2 border-tech-500 py-4 px-1 text-sm font-medium text-tech-600 dark:text-tech-400"
+              onclick="showSection('diary')"
+              data-section="diary"
+            >
+              📝 Learning Diary
+            </button>
+            <button
+              class="nav-tab border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300"
+              onclick="showSection('overview')"
+              data-section="overview"
+            >
+              📋 Lesson Overview
+            </button>
+          </div>
+        </div>
       </nav>
 
-      <!-- Learning Diary Section -->
-      <section id="diary" class="section active">
-        <h2>📝 Learning Diary</h2>
-
-        <div class="stats-container">
-          <div class="stat-card">
-            <div class="stat-number" id="totalEntries">0</div>
-            <div>Total Entries</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number" id="currentWeek">1</div>
-            <div>Current Week</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number" id="topicsLearned">0</div>
-            <div>Topics Learned</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number" id="daysActive">0</div>
-            <div>Days Active</div>
-          </div>
-        </div>
-
-        <div class="diary-container">
-          <!-- Add New Entry Form -->
-          <div class="diary-form">
-            <h3>✍️ Add New Learning Entry</h3>
-            <form id="diaryForm" class="modern-form" novalidate>
-              <!-- Form Grid Section 1: Basic Info -->
-              <div class="form-section">
-                <h4 class="section-title">📝 Basic Information</h4>
-                <div class="form-grid">
-                  <div class="form-group">
-                    <label for="entryType" class="form-label">
-                      <span class="label-text">Entry Type</span>
-                      <span class="required">*</span>
-                    </label>
-                    <div class="input-wrapper">
-                      <select
-                        id="entryType"
-                        class="form-input"
-                        required
-                        aria-describedby="entryType-error"
-                      >
-                        <option value="">Choose entry type...</option>
-                        <option value="orientation">
-                          🎯 Class Orientation
-                        </option>
-                        <option value="day">📖 Daily Learning</option>
-                        <option value="lab">🔬 Lab Exercise</option>
-                        <option value="assignment">📄 Assignment</option>
-                        <option value="exam">📝 Exam/Quiz</option>
-                        <option value="project">🚀 Project Work</option>
-                        <option value="research">🔍 Research/Reading</option>
-                      </select>
-                      <div class="input-icon">
-                        <svg
-                          width="16"
-                          height="16"
-                          fill="currentColor"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                    <div
-                      id="entryType-error"
-                      class="error-message"
-                      role="alert"
-                    ></div>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="weekNumber" class="form-label">
-                      <span class="label-text">Week Number</span>
-                      <span class="required">*</span>
-                    </label>
-                    <div class="input-wrapper">
-                      <input
-                        type="number"
-                        id="weekNumber"
-                        class="form-input"
-                        min="1"
-                        max="16"
-                        value="1"
-                        required
-                        aria-describedby="weekNumber-help weekNumber-error"
-                      />
-                      <div class="input-icon">
-                        <svg
-                          width="16"
-                          height="16"
-                          fill="currentColor"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"
-                          />
-                          <path
-                            d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                    <div id="weekNumber-help" class="help-text">
-                      Current semester week (1-16)
-                    </div>
-                    <div
-                      id="weekNumber-error"
-                      class="error-message"
-                      role="alert"
-                    ></div>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="dayNumber" class="form-label">
-                      <span class="label-text">Day</span>
-                      <span class="optional">(optional)</span>
-                    </label>
-                    <div class="input-wrapper">
-                      <input
-                        type="number"
-                        id="dayNumber"
-                        class="form-input"
-                        min="1"
-                        max="3"
-                        placeholder="1-3"
-                        aria-describedby="dayNumber-help"
-                      />
-                      <div class="input-icon">
-                        <svg
-                          width="16"
-                          height="16"
-                          fill="currentColor"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"
-                          />
-                          <path
-                            d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                    <div id="dayNumber-help" class="help-text">
-                      Class session number within the week (1st day, 2nd day,
-                      etc.)
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="lessonDate" class="form-label">
-                      <span class="label-text">Lesson Date</span>
-                      <span class="optional">(optional)</span>
-                    </label>
-                    <div class="input-wrapper">
-                      <input
-                        type="date"
-                        id="lessonDate"
-                        class="form-input"
-                        aria-describedby="lessonDate-help"
-                      />
-                      <div class="input-icon">
-                        <svg
-                          width="16"
-                          height="16"
-                          fill="currentColor"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"
-                          />
-                          <path
-                            d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                    <div id="lessonDate-help" class="help-text">
-                      Date when this lesson took place
-                    </div>
-                  </div>
+      <!-- Main Content -->
+      <main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <!-- Learning Diary Section -->
+        <section id="diary" class="section active">
+          <!-- Stats Grid -->
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+          >
+            <div
+              class="bg-gradient-to-r from-tech-500 to-tech-600 rounded-xl p-6 text-white"
+            >
+              <div class="flex items-center">
+                <div class="flex-shrink-0">
+                  <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                    <path
+                      fill-rule="evenodd"
+                      d="M4 5a2 2 0 012-2v1a1 1 0 102 0V3h2v1a1 1 0 102 0V3a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm8 8a1 1 0 10-2 0v3a1 1 0 102 0v-3z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                </div>
+                <div class="ml-4">
+                  <div class="text-2xl font-bold" id="totalEntries">0</div>
+                  <div class="text-tech-100">Total Entries</div>
                 </div>
               </div>
+            </div>
 
-              <!-- Form Grid Section 2: Content -->
-              <div class="form-section">
-                <h4 class="section-title">📚 Learning Content</h4>
-
-                <div class="form-group">
-                  <label for="entryTitle" class="form-label">
-                    <span class="label-text">Title/Topic</span>
-                    <span class="required">*</span>
-                  </label>
-                  <div class="input-wrapper">
-                    <input
-                      type="text"
-                      id="entryTitle"
-                      class="form-input"
-                      placeholder="What did you learn today?"
-                      required
-                      maxlength="100"
-                      aria-describedby="entryTitle-error entryTitle-counter"
-                    />
-                    <div class="input-icon">
-                      <svg
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                        viewBox="0 0 16 16"
-                      >
-                        <path
-                          d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-                        />
-                        <path
-                          d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                  <div class="input-footer">
-                    <div id="entryTitle-counter" class="char-counter">
-                      0/100
-                    </div>
-                    <div
-                      id="entryTitle-error"
-                      class="error-message"
-                      role="alert"
-                    ></div>
-                  </div>
+            <div
+              class="bg-gradient-to-r from-cyber-500 to-cyber-600 rounded-xl p-6 text-white"
+            >
+              <div class="flex items-center">
+                <div class="flex-shrink-0">
+                  <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
                 </div>
-
-                <div class="form-group">
-                  <label for="topics" class="form-label">
-                    <span class="label-text">Topics Covered</span>
-                    <span class="optional">(comma-separated)</span>
-                  </label>
-                  <div class="textarea-wrapper">
-                    <textarea
-                      id="topics"
-                      class="form-textarea"
-                      placeholder="Enter topics separated by commas:
-Linux commands, File permissions, Network configuration, System administration, Security hardening, Troubleshooting..."
-                      rows="3"
-                      maxlength="250"
-                      aria-describedby="topics-help topics-counter"
-                      data-tags="true"
-                    ></textarea>
-                    <div class="textarea-resize-handle"></div>
-                  </div>
-                  <div class="input-footer">
-                    <span id="topics-counter" class="char-counter">0/250</span>
-                    <span id="topics-help" class="help-text">
-                      Separate multiple topics with commas
-                    </span>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label for="entryContent" class="form-label">
-                    <span class="label-text">Learning Details</span>
-                    <span class="required">*</span>
-                  </label>
-                  <div class="textarea-wrapper">
-                    <textarea
-                      id="entryContent"
-                      class="form-textarea"
-                      placeholder="Enter each learning point on a new line, or use - for bullets:
-- Learned Linux commands
-- Practiced file permissions
-- Troubleshot network issues"
-                      required
-                      rows="6"
-                      maxlength="2000"
-                      aria-describedby="entryContent-error entryContent-counter"
-                    ></textarea>
-                    <div class="textarea-resize-handle"></div>
-                  </div>
-                  <div class="input-footer">
-                    <div id="entryContent-counter" class="char-counter">
-                      0/2000
-                    </div>
-                    <div
-                      id="entryContent-error"
-                      class="error-message"
-                      role="alert"
-                    ></div>
-                  </div>
+                <div class="ml-4">
+                  <div class="text-2xl font-bold" id="currentWeek">1</div>
+                  <div class="text-cyber-100">Current Week</div>
                 </div>
               </div>
+            </div>
 
-              <!-- Form Grid Section 3: Metadata -->
-              <div class="form-section">
-                <h4 class="section-title">⚙️ Learning Metadata</h4>
-                <div class="form-grid">
-                  <div class="form-group">
-                    <label for="timeSpent" class="form-label">
-                      <span class="label-text">Time Spent</span>
-                      <span class="optional">(hours)</span>
-                    </label>
-                    <div class="input-wrapper">
-                      <input
-                        type="number"
-                        id="timeSpent"
-                        class="form-input"
-                        min="0.5"
-                        max="24"
-                        step="0.5"
-                        placeholder="2.5"
-                        aria-describedby="timeSpent-help"
-                      />
-                      <div class="input-icon">
-                        <svg
-                          width="16"
-                          height="16"
-                          fill="currentColor"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"
-                          />
-                          <path
-                            d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                    <div id="timeSpent-help" class="help-text">
-                      Estimated learning time in hours
-                    </div>
-                  </div>
+            <div
+              class="bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl p-6 text-white"
+            >
+              <div class="flex items-center">
+                <div class="flex-shrink-0">
+                  <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                </div>
+                <div class="ml-4">
+                  <div class="text-2xl font-bold" id="topicsLearned">0</div>
+                  <div class="text-purple-100">Topics Learned</div>
                 </div>
               </div>
+            </div>
 
-              <!-- Submit Button -->
-              <div class="form-actions">
-                <button type="submit" class="btn btn-primary">
-                  <span class="btn-icon">💾</span>
-                  <span class="btn-text">Save Learning Entry</span>
-                  <div class="btn-loader" aria-hidden="true">
-                    <svg
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      viewBox="0 0 16 16"
+            <div
+              class="bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl p-6 text-white"
+            >
+              <div class="flex items-center">
+                <div class="flex-shrink-0">
+                  <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                </div>
+                <div class="ml-4">
+                  <div class="text-2xl font-bold" id="daysActive">0</div>
+                  <div class="text-orange-100">Days Active</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Content Grid -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Entry Form -->
+            <div
+              class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
+            >
+              <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                  ✍️ Add New Entry
+                </h3>
+              </div>
+
+              <form id="diaryForm" class="p-6 space-y-6" novalidate>
+                <!-- Basic Info -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                     >
-                      <path
-                        d="M8 0c-4.418 0-8 3.582-8 8 0 1.017.196 1.989.552 2.887l1.614-.914A5.928 5.928 0 0 1 2 8c0-3.313 2.687-6 6-6s6 2.687 6 6-2.687 6-6 6a5.928 5.928 0 0 1-2.166-.166l-.914 1.614A7.929 7.929 0 0 0 8 16c4.418 0 8-3.582 8-8S12.418 0 8 0z"
-                      />
-                    </svg>
+                      Entry Type <span class="text-red-500">*</span>
+                    </label>
+                    <select
+                      id="entryType"
+                      class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-tech-500 focus:border-transparent"
+                      required
+                    >
+                      <option value="">Choose type...</option>
+                      <option value="orientation">🎯 Class Orientation</option>
+                      <option value="day">📖 Daily Learning</option>
+                      <option value="lab">🔬 Lab Exercise</option>
+                      <option value="assignment">📄 Assignment</option>
+                      <option value="exam">📝 Exam/Quiz</option>
+                      <option value="project">🚀 Project Work</option>
+                      <option value="research">🔍 Research/Reading</option>
+                    </select>
                   </div>
+
+                  <div>
+                    <label
+                      class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >
+                      Week Number <span class="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="number"
+                      id="weekNumber"
+                      min="1"
+                      max="16"
+                      value="1"
+                      class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-tech-500 focus:border-transparent"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                      >Day</label
+                    >
+                    <input
+                      type="number"
+                      id="dayNumber"
+                      min="1"
+                      max="3"
+                      placeholder="1-3"
+                      class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-tech-500 focus:border-transparent"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                      >Lesson Date</label
+                    >
+                    <input
+                      type="date"
+                      id="lessonDate"
+                      class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-tech-500 focus:border-transparent"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                  >
+                    Title/Topic <span class="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="entryTitle"
+                    maxlength="100"
+                    placeholder="What did you learn today?"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-tech-500 focus:border-transparent"
+                    required
+                  />
+                  <div
+                    class="text-xs text-gray-500 dark:text-gray-400 mt-1"
+                    id="entryTitle-counter"
+                  >
+                    0/100
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Topics Covered</label
+                  >
+                  <textarea
+                    id="topics"
+                    rows="2"
+                    maxlength="250"
+                    placeholder="Linux commands, File permissions, Network configuration..."
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-tech-500 focus:border-transparent resize-none"
+                  ></textarea>
+                  <div
+                    class="text-xs text-gray-500 dark:text-gray-400 mt-1"
+                    id="topics-counter"
+                  >
+                    0/250
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                  >
+                    Learning Details <span class="text-red-500">*</span>
+                  </label>
+                  <textarea
+                    id="entryContent"
+                    rows="4"
+                    maxlength="2000"
+                    placeholder="- Learned Linux commands&#10;- Practiced file permissions&#10;- Troubleshot network issues"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-tech-500 focus:border-transparent"
+                    required
+                  ></textarea>
+                  <div
+                    class="text-xs text-gray-500 dark:text-gray-400 mt-1"
+                    id="entryContent-counter"
+                  >
+                    0/2000
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >Time Spent (hours)</label
+                  >
+                  <input
+                    type="number"
+                    id="timeSpent"
+                    min="0.5"
+                    max="24"
+                    step="0.5"
+                    placeholder="2.5"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-tech-500 focus:border-transparent"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  class="w-full bg-gradient-to-r from-tech-500 to-tech-600 text-white py-3 px-4 rounded-lg font-medium hover:from-tech-600 hover:to-tech-700 focus:ring-2 focus:ring-tech-500 focus:ring-offset-2 transition-all duration-200"
+                >
+                  💾 Save Learning Entry
                 </button>
-              </div>
-            </form>
+              </form>
 
-            <div class="export-section">
-              <h4>📥 Data Management</h4>
-              <button class="btn btn-secondary" onclick="exportDiary()">
-                📤 Export Diary (JSON)
-              </button>
-              <button class="btn btn-secondary" onclick="importDiary()">
-                📥 Import Diary
-              </button>
-              <button class="btn btn-secondary" onclick="refreshUI()">
-                🔄 Refresh Display
-              </button>
-              <input
-                type="file"
-                id="importFile"
-                accept=".json"
-                style="display: none"
-              />
-            </div>
-          </div>
-
-          <!-- Display Entries -->
-          <div class="diary-entries">
-            <h3>📚 Learning Entries</h3>
-
-            <div class="search-filter">
-              <input
-                type="text"
-                id="searchEntries"
-                placeholder="🔍 Search entries..."
-              />
-              <select id="filterWeek">
-                <option value="">All Weeks</option>
-              </select>
-              <select id="filterType">
-                <option value="">All Types</option>
-                <option value="week">Weekly Summary</option>
-                <option value="orientation">Class Orientation</option>
-                <option value="day">Daily Learning</option>
-                <option value="lab">Lab Exercise</option>
-                <option value="assignment">Assignment</option>
-                <option value="exam">Exam/Quiz</option>
-                <option value="project">Project Work</option>
-                <option value="research">Research/Reading</option>
-              </select>
-            </div>
-
-            <div id="entriesContainer">
-              <div class="no-entries">
-                📝 No entries yet. Start documenting your learning journey!
+              <!-- Data Management -->
+              <div class="p-6 border-t border-gray-200 dark:border-gray-700">
+                <h4
+                  class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3"
+                >
+                  📥 Data Management
+                </h4>
+                <div class="flex flex-wrap gap-2">
+                  <button
+                    onclick="exportDiary()"
+                    class="flex-1 bg-gray-600 text-white py-2 px-3 rounded-lg text-sm hover:bg-gray-700 transition-colors"
+                  >
+                    📤 Export
+                  </button>
+                  <button
+                    onclick="importDiary()"
+                    class="flex-1 bg-gray-600 text-white py-2 px-3 rounded-lg text-sm hover:bg-gray-700 transition-colors"
+                  >
+                    📥 Import
+                  </button>
+                  <button
+                    onclick="refreshUI()"
+                    class="flex-1 bg-gray-600 text-white py-2 px-3 rounded-lg text-sm hover:bg-gray-700 transition-colors"
+                  >
+                    🔄 Refresh
+                  </button>
+                </div>
+                <input
+                  type="file"
+                  id="importFile"
+                  accept=".json"
+                  class="hidden"
+                />
               </div>
             </div>
-          </div>
-        </div>
-      </section>
 
-      <!-- Lesson Overview Section -->
-      <section id="overview" class="section">
-        <h2>📋 Weekly & Daily Learning Overview</h2>
+            <!-- Entries List -->
+            <div
+              class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
+            >
+              <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                  📚 Learning Entries
+                </h3>
 
-        <div class="card">
-          <h3>Your Learning Progress</h3>
-          <p>
-            Track your actual progress through the weekly lessons and daily
-            activities in IT401 System Administration and Maintenance based on
-            your diary entries.
-          </p>
-        </div>
+                <!-- Filters -->
+                <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <input
+                    type="text"
+                    id="searchEntries"
+                    placeholder="🔍 Search entries..."
+                    class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-tech-500 focus:border-transparent"
+                  />
+                  <select
+                    id="filterWeek"
+                    class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-tech-500 focus:border-transparent"
+                  >
+                    <option value="">All Weeks</option>
+                  </select>
+                  <select
+                    id="filterType"
+                    class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-tech-500 focus:border-transparent"
+                  >
+                    <option value="">All Types</option>
+                    <option value="orientation">Class Orientation</option>
+                    <option value="day">Daily Learning</option>
+                    <option value="lab">Lab Exercise</option>
+                    <option value="assignment">Assignment</option>
+                    <option value="exam">Exam/Quiz</option>
+                    <option value="project">Project Work</option>
+                    <option value="research">Research/Reading</option>
+                  </select>
+                </div>
+              </div>
 
-        <div class="card">
-          <h3>Your Learning Journey</h3>
-          <div id="learningOverview" class="timeline">
-            <div class="no-entries">
-              📝 No learning entries yet. Start documenting your journey in the
-              Learning Diary tab!
+              <div class="max-h-96 overflow-y-auto">
+                <div id="entriesContainer" class="p-6">
+                  <div
+                    class="text-center text-gray-500 dark:text-gray-400 py-8"
+                  >
+                    📝 No entries yet. Start documenting your learning journey!
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+
+        <!-- Overview Section -->
+        <section id="overview" class="section hidden">
+          <div
+            class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6"
+          >
+            <h2
+              class="text-xl font-semibold text-gray-900 dark:text-white mb-6"
+            >
+              📋 Weekly & Daily Learning Overview
+            </h2>
+
+            <div
+              class="mb-6 p-4 bg-tech-50 dark:bg-tech-900/20 rounded-lg border border-tech-200 dark:border-tech-800"
+            >
+              <h3
+                class="text-lg font-medium text-tech-900 dark:text-tech-100 mb-2"
+              >
+                Your Learning Progress
+              </h3>
+              <p class="text-tech-700 dark:text-tech-300">
+                Track your actual progress through the weekly lessons and daily
+                activities in IT401 System Administration and Maintenance based
+                on your diary entries.
+              </p>
+            </div>
+
+            <div id="learningOverview" class="space-y-4">
+              <div class="text-center text-gray-500 dark:text-gray-400 py-8">
+                📝 No learning entries yet. Start documenting your journey in
+                the Learning Diary tab!
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
 
     <!-- Firebase SDK v9+ (modular) -->

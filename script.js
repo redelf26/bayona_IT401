@@ -26,26 +26,30 @@ document.addEventListener("DOMContentLoaded", async function () {
 // Theme setup (light/dark)
 function initTheme() {
   try {
-    const root = document.documentElement;
     const saved = localStorage.getItem("theme");
     const prefersDark =
       window.matchMedia &&
       window.matchMedia("(prefers-color-scheme: dark)").matches;
     const theme = saved || (prefersDark ? "dark" : "light");
 
-    if (theme === "dark") root.setAttribute("data-theme", "dark");
-    else root.removeAttribute("data-theme");
+    // Apply theme using Tailwind's dark mode class
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
 
-    const switchEl = document.getElementById("themeSwitch");
-    if (switchEl) {
-      switchEl.checked = theme === "dark";
-      switchEl.addEventListener("change", (e) => {
-        if (e.target.checked) {
-          root.setAttribute("data-theme", "dark");
-          localStorage.setItem("theme", "dark");
-        } else {
-          root.removeAttribute("data-theme");
+    // Set up theme toggle button
+    const themeToggle = document.getElementById("themeToggle");
+    if (themeToggle) {
+      themeToggle.addEventListener("click", () => {
+        const isDark = document.documentElement.classList.contains("dark");
+        if (isDark) {
+          document.documentElement.classList.remove("dark");
           localStorage.setItem("theme", "light");
+        } else {
+          document.documentElement.classList.add("dark");
+          localStorage.setItem("theme", "dark");
         }
       });
     }
@@ -196,7 +200,7 @@ function editDiaryEntry(id) {
   updateFormForEdit();
 
   // Scroll to form
-  document.querySelector(".diary-form").scrollIntoView({
+  document.getElementById("diaryForm").scrollIntoView({
     behavior: "smooth",
     block: "start",
   });
@@ -230,12 +234,10 @@ function autoResizeTextarea(fieldId) {
 }
 
 function updateFormForEdit() {
-  const submitBtn = document.querySelector(".btn-primary .btn-text");
-  const submitIcon = document.querySelector(".btn-primary .btn-icon");
-  const formTitle = document.querySelector(".diary-form h3");
+  const submitBtn = document.querySelector('button[type="submit"]');
+  const formTitle = document.querySelector("h3");
 
-  if (submitBtn) submitBtn.textContent = "Update Learning Entry";
-  if (submitIcon) submitIcon.textContent = "💾";
+  if (submitBtn) submitBtn.textContent = "💾 Update Learning Entry";
   if (formTitle) formTitle.innerHTML = "✏️ Edit Learning Entry";
 
   // Add cancel button if it doesn't exist
@@ -244,15 +246,28 @@ function updateFormForEdit() {
     cancelBtn = document.createElement("button");
     cancelBtn.id = "cancelEditBtn";
     cancelBtn.type = "button";
-    cancelBtn.className = "btn btn-secondary";
-    cancelBtn.style.marginTop = "10px";
+    cancelBtn.className =
+      "w-full bg-gray-500 text-white py-2 px-4 rounded-lg font-medium hover:bg-gray-600 transition-colors mt-2";
     cancelBtn.innerHTML = "❌ Cancel Edit";
     cancelBtn.onclick = cancelEdit;
 
-    const formActions = document.querySelector(".form-actions");
-    formActions.appendChild(cancelBtn);
+    const form = document.getElementById("diaryForm");
+    form.appendChild(cancelBtn);
   }
   cancelBtn.style.display = "block";
+}
+
+function resetFormAppearance() {
+  // Reset form appearance without clearing form data
+  const submitBtn = document.querySelector('button[type="submit"]');
+  const formTitle = document.querySelector("h3");
+
+  if (submitBtn) submitBtn.textContent = "💾 Save Learning Entry";
+  if (formTitle) formTitle.innerHTML = "✍️ Add New Learning Entry";
+
+  // Hide cancel button
+  const cancelBtn = document.getElementById("cancelEditBtn");
+  if (cancelBtn) cancelBtn.style.display = "none";
 }
 
 function cancelEdit() {
@@ -263,12 +278,10 @@ function cancelEdit() {
   document.getElementById("diaryForm").reset();
 
   // Reset form appearance
-  const submitBtn = document.querySelector(".btn-primary .btn-text");
-  const submitIcon = document.querySelector(".btn-primary .btn-icon");
-  const formTitle = document.querySelector(".diary-form h3");
+  const submitBtn = document.querySelector('button[type="submit"]');
+  const formTitle = document.querySelector("h3");
 
-  if (submitBtn) submitBtn.textContent = "Save Learning Entry";
-  if (submitIcon) submitIcon.textContent = "💾";
+  if (submitBtn) submitBtn.textContent = "💾 Save Learning Entry";
   if (formTitle) formTitle.innerHTML = "✍️ Add New Learning Entry";
 
   // Hide cancel button
@@ -287,21 +300,6 @@ function cancelEdit() {
   if (topicsTextarea) topicsTextarea.style.height = "auto";
 
   showNotification("❌ Edit cancelled", "info");
-}
-
-function resetFormAppearance() {
-  // Reset form appearance without clearing form data
-  const submitBtn = document.querySelector(".btn-primary .btn-text");
-  const submitIcon = document.querySelector(".btn-primary .btn-icon");
-  const formTitle = document.querySelector(".diary-form h3");
-
-  if (submitBtn) submitBtn.textContent = "Save Learning Entry";
-  if (submitIcon) submitIcon.textContent = "💾";
-  if (formTitle) formTitle.innerHTML = "✍️ Add New Learning Entry";
-
-  // Hide cancel button
-  const cancelBtn = document.getElementById("cancelEditBtn");
-  if (cancelBtn) cancelBtn.style.display = "none";
 }
 
 function displayEntries() {
@@ -339,7 +337,7 @@ function displayEntries() {
 
   if (filteredEntries.length === 0) {
     container.innerHTML =
-      '<div class="no-entries">📝 No entries found matching your criteria.</div>';
+      '<div class="text-center text-gray-500 dark:text-gray-400 py-8">📝 No entries found matching your criteria.</div>';
     console.log("displayEntries: no entries to display");
     return;
   }
@@ -347,19 +345,21 @@ function displayEntries() {
   container.innerHTML = filteredEntries
     .map(
       (entry) => `
-            <div class="diary-entry">
-                <h4>
-                    <span>${entry.title}</span>
-                    <div class="entry-actions">
-                        <button class="btn-edit" onclick="editDiaryEntry(${
+            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 border border-gray-200 dark:border-gray-600 mb-4">
+                <div class="flex justify-between items-start mb-2">
+                    <h4 class="text-lg font-semibold text-gray-900 dark:text-white">${
+                      entry.title
+                    }</h4>
+                    <div class="flex space-x-2">
+                        <button class="text-blue-500 hover:text-blue-700 p-1" onclick="editDiaryEntry(${
                           entry.id
                         })" title="Edit Entry">✏️</button>
-                        <button class="btn-danger" onclick="deleteDiaryEntry(${
+                        <button class="text-red-500 hover:text-red-700 p-1" onclick="deleteDiaryEntry(${
                           entry.id
                         })" title="Delete Entry">🗑️</button>
                     </div>
-                </h4>
-                <div class="diary-meta">
+                </div>
+                <div class="text-sm text-gray-600 dark:text-gray-400 mb-3">
                     📅 ${formatDate(entry.date)}${
         entry.lessonDate
           ? ` | 🗓️ Lesson: ${formatLessonDate(entry.lessonDate)}`
@@ -375,25 +375,28 @@ function displayEntries() {
                 ${
                   entry.topics.length > 0
                     ? `
-                    <div class="diary-topics">
+                    <div class="flex flex-wrap gap-2 mb-3">
                         ${entry.topics
                           .map(
-                            (topic) => `<span class="topic-tag">${topic}</span>`
+                            (topic) =>
+                              `<span class="px-2 py-1 bg-tech-100 dark:bg-tech-800 text-tech-800 dark:text-tech-200 rounded-md text-xs">${topic}</span>`
                           )
                           .join("")}
                     </div>
                 `
                     : ""
                 }
-                <div class="content-toggle-header" onclick="toggleContent('content-${
+                <div class="cursor-pointer text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" onclick="toggleContent('content-${
                   entry.id
                 }')">
-                    <span class="content-toggle-icon">▼</span>
-                    <span class="content-toggle-text">Learning Details</span>
+                    <span class="inline-block transform transition-transform" id="icon-${
+                      entry.id
+                    }">▼</span>
+                    <span class="ml-2">Learning Details</span>
                 </div>
                 <div id="content-${
                   entry.id
-                }" class="diary-content collapsible-content expanded">${formatContentAsBullets(
+                }" class="text-gray-700 dark:text-gray-300 text-sm bg-white dark:bg-gray-800 rounded-md p-3 border border-gray-200 dark:border-gray-600">${formatContentAsBullets(
         entry.content
       )}</div>
             </div>
@@ -676,19 +679,53 @@ function showSection(sectionId) {
   const sections = document.querySelectorAll(".section");
   sections.forEach((section) => {
     section.classList.remove("active");
+    section.classList.add("hidden");
   });
 
   // Show selected section
-  document.getElementById(sectionId).classList.add("active");
+  const targetSection = document.getElementById(sectionId);
+  if (targetSection) {
+    targetSection.classList.add("active");
+    targetSection.classList.remove("hidden");
+  }
 
   // Update navigation buttons
-  const buttons = document.querySelectorAll(".nav-btn");
+  const buttons = document.querySelectorAll(".nav-tab");
   buttons.forEach((button) => {
-    button.classList.remove("active");
+    button.classList.remove(
+      "active-tab",
+      "border-tech-500",
+      "text-tech-600",
+      "dark:text-tech-400"
+    );
+    button.classList.add(
+      "border-transparent",
+      "text-gray-500",
+      "hover:text-gray-700",
+      "hover:border-gray-300",
+      "dark:text-gray-400",
+      "dark:hover:text-gray-300"
+    );
   });
 
   // Highlight active button
-  event.target.classList.add("active");
+  const activeButton = document.querySelector(`[data-section="${sectionId}"]`);
+  if (activeButton) {
+    activeButton.classList.add(
+      "active-tab",
+      "border-tech-500",
+      "text-tech-600",
+      "dark:text-tech-400"
+    );
+    activeButton.classList.remove(
+      "border-transparent",
+      "text-gray-500",
+      "hover:text-gray-700",
+      "hover:border-gray-300",
+      "dark:text-gray-400",
+      "dark:hover:text-gray-300"
+    );
+  }
 
   // Update sections when shown
   if (sectionId === "overview") {
@@ -707,7 +744,7 @@ function updateLearningOverview() {
 
   if (diaryEntries.length === 0) {
     container.innerHTML = `
-      <div class="no-entries">
+      <div class="text-center text-gray-500 dark:text-gray-400 py-8">
         📝 No learning entries yet. Start documenting your journey in the Learning Diary tab!
       </div>
     `;
@@ -770,39 +807,26 @@ function updateLearningOverview() {
       });
 
       return `
-      <div class="timeline-item">
-        <div class="week-header collapsible" onclick="toggleWeek('week-${week}')">
-          <h4>
-            <span class="collapse-icon">▶</span>
-            Week ${week}: Learning Summary
-          </h4>
-          <div class="week-summary">
-            ${
-              weekTopics.length > 0
-                ? `<span class="summary-item">📚 ${weekTopics.length} topics</span>`
-                : ""
-            }
-            ${
-              totalWeekTime > 0
-                ? `<span class="summary-item">⏱️ ${totalWeekTime}h total</span>`
-                : ""
-            }
-            ${dayTimes
-              .map((dt) =>
-                dt.time > 0
-                  ? `<span class="summary-item">📅 ${dt.day}: ${dt.time}h</span>`
-                  : ""
-              )
-              .filter(Boolean)
-              .join("")}
+      <div class="bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 mb-4">
+        <div class="p-4 cursor-pointer" onclick="toggleWeek('week-${week}')">
+          <div class="flex items-center justify-between">
+            <h4 class="text-lg font-semibold text-gray-900 dark:text-white">
+              <span class="inline-block transform transition-transform mr-2" id="week-icon-${week}">▶</span>
+              Week ${week}: Learning Summary
+            </h4>
+            <div class="text-sm text-gray-600 dark:text-gray-400">
+              ${weekTopics.length > 0 ? `📚 ${weekTopics.length} topics` : ""}
+              ${totalWeekTime > 0 ? ` • ⏱️ ${totalWeekTime}h total` : ""}
+            </div>
           </div>
           ${
             weekTopics.length > 0
               ? `
-            <div class="week-topics-summary">
+            <div class="mt-2 flex flex-wrap gap-2">
               ${weekTopics
                 .map(
-                  (topic) => `<span class="topic-summary-tag">${topic}</span>`
+                  (topic) =>
+                    `<span class="px-2 py-1 bg-tech-100 dark:bg-tech-800 text-tech-800 dark:text-tech-200 rounded-md text-xs">${topic}</span>`
                 )
                 .join("")}
             </div>
@@ -811,114 +835,119 @@ function updateLearningOverview() {
           }
         </div>
         
-        <div id="week-${week}" class="week-content collapsed">
-          ${
-            weekTopics.length > 0
-              ? `
-            <p><strong>Topics Covered:</strong> ${weekTopics.join(", ")}</p>
-          `
-              : ""
-          }
-          ${
-            totalWeekTime > 0
-              ? `
-            <p><strong>Total Time Spent:</strong> ${totalWeekTime} hours</p>
-          `
-              : ""
-          }
-          
-          ${Object.keys(entriesByDay)
-            .map((dayKey) => {
-              const dayTime = entriesByDay[dayKey].reduce(
-                (sum, entry) => sum + (entry.timeSpent || 0),
-                0
-              );
-              // Get unique topics for this day
-              const dayTopics = [
-                ...new Set(
-                  entriesByDay[dayKey].flatMap((entry) => entry.topics)
-                ),
-              ];
-              return `
-            <div class="day-summary">
-              <div class="day-header collapsible" onclick="toggleDay('week-${week}-${dayKey.replace(
-                /\s+/g,
-                "-"
-              )}')">
-                <h5>
-                  <span class="collapse-icon">▶</span>
-                  📅 ${dayKey}
-                  ${
-                    dayTime > 0
-                      ? `<span class="day-time">⏱️ ${dayTime}h</span>`
-                      : ""
-                  }
-                </h5>
-              </div>
-              ${
-                dayTopics.length > 0
-                  ? `
-                <div class="day-topics-summary">
-                  ${dayTopics
-                    .map(
-                      (topic) => `<span class="day-topic-tag">${topic}</span>`
-                    )
-                    .join("")}
-                </div>
-              `
-                  : ""
-              }
-              <div id="week-${week}-${dayKey.replace(
-                /\s+/g,
-                "-"
-              )}" class="day-content collapsed">
-                ${entriesByDay[dayKey]
-                  .map(
-                    (entry) => `
-                  <div class="overview-entry">
-                    <div class="overview-entry-header">
-                      <span class="entry-type-badge ${
-                        entry.type
-                      }">${getTypeIcon(entry.type)} ${entry.title}</span>
-                      ${
-                        entry.lessonDate
-                          ? `<span class="lesson-date">🗓️ ${formatLessonDate(
-                              entry.lessonDate
-                            )}</span>`
-                          : ""
-                      }
-                      ${
-                        entry.timeSpent
-                          ? `<span class="entry-time">⏱️ ${entry.timeSpent}h</span>`
-                          : ""
-                      }
-                    </div>
+        <div id="week-${week}" class="hidden border-t border-gray-200 dark:border-gray-600">
+          <div class="p-4">
+            ${
+              totalWeekTime > 0
+                ? `
+              <p class="text-gray-700 dark:text-gray-300 mb-3"><strong>Total Time Spent:</strong> ${totalWeekTime} hours</p>
+            `
+                : ""
+            }
+            
+            ${Object.keys(entriesByDay)
+              .map((dayKey) => {
+                const dayTime = entriesByDay[dayKey].reduce(
+                  (sum, entry) => sum + (entry.timeSpent || 0),
+                  0
+                );
+                // Get unique topics for this day
+                const dayTopics = [
+                  ...new Set(
+                    entriesByDay[dayKey].flatMap((entry) => entry.topics)
+                  ),
+                ];
+                return `
+              <div class="mb-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600">
+                <div class="p-3 cursor-pointer" onclick="toggleDay('week-${week}-${dayKey.replace(
+                  /\s+/g,
+                  "-"
+                )}')">
+                  <div class="flex items-center justify-between">
+                    <h5 class="font-medium text-gray-900 dark:text-white">
+                      <span class="inline-block transform transition-transform mr-2" id="day-icon-${week}-${dayKey.replace(
+                  /\s+/g,
+                  "-"
+                )}">▶</span>
+                      📅 ${dayKey}
+                    </h5>
                     ${
-                      entry.topics.length > 0
-                        ? `
-                      <div class="overview-topics">
-                        ${entry.topics
-                          .map(
-                            (topic) =>
-                              `<span class="mini-topic-tag">${topic}</span>`
-                          )
-                          .join("")}
-                      </div>
-                    `
+                      dayTime > 0
+                        ? `<span class="text-sm text-gray-600 dark:text-gray-400">⏱️ ${dayTime}h</span>`
                         : ""
                     }
-                    <div class="overview-content">${formatContentAsBullets(
-                      entry.content
-                    )}</div>
                   </div>
-                `
-                  )
-                  .join("")}
+                  ${
+                    dayTopics.length > 0
+                      ? `
+                    <div class="mt-2 flex flex-wrap gap-1">
+                      ${dayTopics
+                        .map(
+                          (topic) =>
+                            `<span class="px-2 py-1 bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded text-xs">${topic}</span>`
+                        )
+                        .join("")}
+                    </div>
+                  `
+                      : ""
+                  }
+                </div>
+                <div id="week-${week}-${dayKey.replace(
+                  /\s+/g,
+                  "-"
+                )}" class="hidden border-t border-gray-200 dark:border-gray-600">
+                  <div class="p-3 space-y-3">
+                    ${entriesByDay[dayKey]
+                      .map(
+                        (entry) => `
+                      <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
+                        <div class="flex items-start justify-between mb-2">
+                          <span class="font-medium text-gray-900 dark:text-white">${getTypeIcon(
+                            entry.type
+                          )} ${entry.title}</span>
+                          <div class="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400">
+                            ${
+                              entry.lessonDate
+                                ? `<span>🗓️ ${formatLessonDate(
+                                    entry.lessonDate
+                                  )}</span>`
+                                : ""
+                            }
+                            ${
+                              entry.timeSpent
+                                ? `<span>⏱️ ${entry.timeSpent}h</span>`
+                                : ""
+                            }
+                          </div>
+                        </div>
+                        ${
+                          entry.topics.length > 0
+                            ? `
+                          <div class="flex flex-wrap gap-1 mb-2">
+                            ${entry.topics
+                              .map(
+                                (topic) =>
+                                  `<span class="px-2 py-1 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded text-xs">${topic}</span>`
+                              )
+                              .join("")}
+                          </div>
+                        `
+                            : ""
+                        }
+                        <div class="text-gray-700 dark:text-gray-300 text-sm">${formatContentAsBullets(
+                          entry.content
+                        )}</div>
+                      </div>
+                    `
+                      )
+                      .join("")}
+                  </div>
+                </div>
               </div>
-            </div>
-          `;
-            })
-            .join("")}
+            `;
+              })
+              .join("")}
+          </div>
         </div>
       </div>
     `;
@@ -928,49 +957,51 @@ function updateLearningOverview() {
 
 function toggleWeek(weekId) {
   const weekContent = document.getElementById(weekId);
-  const icon =
-    weekContent.previousElementSibling.querySelector(".collapse-icon");
+  const icon = document.getElementById(
+    "week-icon-" + weekId.replace("week-", "")
+  );
 
-  if (weekContent.classList.contains("collapsed")) {
-    weekContent.classList.remove("collapsed");
-    weekContent.classList.add("expanded");
-    icon.textContent = "▼";
-  } else {
-    weekContent.classList.add("collapsed");
-    weekContent.classList.remove("expanded");
-    icon.textContent = "▶";
+  if (weekContent && icon) {
+    if (weekContent.classList.contains("hidden")) {
+      weekContent.classList.remove("hidden");
+      icon.style.transform = "rotate(90deg)";
+    } else {
+      weekContent.classList.add("hidden");
+      icon.style.transform = "rotate(0deg)";
+    }
   }
 }
 
 function toggleDay(dayId) {
   const dayContent = document.getElementById(dayId);
-  const icon =
-    dayContent.previousElementSibling.querySelector(".collapse-icon");
+  const iconId = "day-icon-" + dayId.replace("week-", "");
+  const icon = document.getElementById(iconId);
 
-  if (dayContent.classList.contains("collapsed")) {
-    dayContent.classList.remove("collapsed");
-    dayContent.classList.add("expanded");
-    icon.textContent = "▼";
-  } else {
-    dayContent.classList.add("collapsed");
-    dayContent.classList.remove("expanded");
-    icon.textContent = "▶";
+  if (dayContent && icon) {
+    if (dayContent.classList.contains("hidden")) {
+      dayContent.classList.remove("hidden");
+      icon.style.transform = "rotate(90deg)";
+    } else {
+      dayContent.classList.add("hidden");
+      icon.style.transform = "rotate(0deg)";
+    }
   }
 }
 
 function toggleContent(contentId) {
   const content = document.getElementById(contentId);
-  const header = content.previousElementSibling;
-  const icon = header.querySelector(".content-toggle-icon");
+  const icon = document.getElementById(
+    "icon-" + contentId.replace("content-", "")
+  );
 
-  if (content.classList.contains("expanded")) {
-    content.classList.remove("expanded");
-    content.classList.add("collapsed");
-    icon.textContent = "▶";
-  } else {
-    content.classList.add("expanded");
-    content.classList.remove("collapsed");
-    icon.textContent = "▼";
+  if (content && icon) {
+    if (content.style.display === "none") {
+      content.style.display = "block";
+      icon.style.transform = "rotate(0deg)";
+    } else {
+      content.style.display = "none";
+      icon.style.transform = "rotate(-90deg)";
+    }
   }
 }
 
@@ -995,52 +1026,6 @@ function getTypeIcon(type) {
 //     weekNumberInput.value = getCurrentWeek();
 //   }
 // });
-
-// Add CSS for notification animations
-const style = document.createElement("style");
-style.textContent = `
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes slideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
-        }
-        .timeline {
-            position: relative;
-            padding-left: 30px;
-        }
-        .timeline:before {
-            content: '';
-            position: absolute;
-            left: 10px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: #3498db;
-        }
-        .timeline-item {
-            position: relative;
-            margin-bottom: 30px;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-        }
-        .timeline-item:before {
-            content: '';
-            position: absolute;
-            left: -25px;
-            top: 25px;
-            width: 12px;
-            height: 12px;
-            background: #3498db;
-            border-radius: 50%;
-            border: 3px solid white;
-        }
-    `;
-document.head.appendChild(style);
 
 // Modern Form Enhancements (initialized in main DOMContentLoaded)
 
@@ -1092,7 +1077,7 @@ function setupCharacterCounters() {
 
 function setupFormValidation() {
   const form = document.getElementById("diaryForm");
-  const inputs = form.querySelectorAll(".form-input, .form-textarea");
+  const inputs = form.querySelectorAll("input, textarea, select");
 
   inputs.forEach((input) => {
     // Real-time validation
@@ -1101,7 +1086,7 @@ function setupFormValidation() {
     });
 
     input.addEventListener("input", function () {
-      if (this.classList.contains("error")) {
+      if (this.classList.contains("border-red-500")) {
         validateField(this);
       }
     });
@@ -1109,16 +1094,11 @@ function setupFormValidation() {
 }
 
 function validateField(field) {
-  const errorElement = document.getElementById(field.id + "-error");
   let isValid = true;
   let errorMessage = "";
 
   // Clear previous error state
-  field.classList.remove("error");
-  if (errorElement) {
-    errorElement.textContent = "";
-    errorElement.classList.remove("show");
-  }
+  field.classList.remove("border-red-500");
 
   // Required field validation
   if (field.hasAttribute("required") && !field.value.trim()) {
@@ -1169,10 +1149,10 @@ function validateField(field) {
   }
 
   // Display error if invalid
-  if (!isValid && errorElement) {
-    field.classList.add("error");
-    errorElement.textContent = errorMessage;
-    errorElement.classList.add("show");
+  if (!isValid) {
+    field.classList.add("border-red-500");
+    // You could show error message in a tooltip or notification
+    showNotification(errorMessage, "error");
   }
 
   return isValid;
@@ -1217,13 +1197,13 @@ function setupInputEnhancements() {
 
 function setupFormSubmission() {
   const form = document.getElementById("diaryForm");
-  const submitBtn = form.querySelector(".btn-primary");
+  const submitBtn = form.querySelector('button[type="submit"]');
 
   form.addEventListener("submit", function (e) {
     e.preventDefault();
 
     // Validate entire form
-    const inputs = form.querySelectorAll(".form-input, .form-textarea");
+    const inputs = form.querySelectorAll("input, textarea, select");
     let isFormValid = true;
 
     inputs.forEach((input) => {
@@ -1234,7 +1214,7 @@ function setupFormSubmission() {
 
     if (!isFormValid) {
       // Scroll to first error
-      const firstError = form.querySelector(".error");
+      const firstError = form.querySelector(".border-red-500");
       if (firstError) {
         firstError.scrollIntoView({ behavior: "smooth", block: "center" });
         firstError.focus();
@@ -1243,7 +1223,8 @@ function setupFormSubmission() {
     }
 
     // Show loading state
-    submitBtn.classList.add("loading");
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = "💾 Saving...";
     submitBtn.disabled = true;
 
     // Simulate processing delay for UX
@@ -1251,16 +1232,12 @@ function setupFormSubmission() {
       addDiaryEntry();
 
       // Reset loading state
-      submitBtn.classList.remove("loading");
+      submitBtn.textContent = originalText;
       submitBtn.disabled = false;
 
       // Reset form validation states
       inputs.forEach((input) => {
-        input.classList.remove("error");
-        const errorElement = document.getElementById(input.id + "-error");
-        if (errorElement) {
-          errorElement.classList.remove("show");
-        }
+        input.classList.remove("border-red-500");
       });
     }, 500);
   });
