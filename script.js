@@ -1,7 +1,11 @@
 // Learning Diary Management
 let diaryEntries = [];
 
-// Load diary data from Firebase/localStorage on page load and initialize app
+/**
+ * Initializes the application after the DOM is fully loaded.
+ * It sets up the theme, loads diary data, and updates the UI.
+ * @returns {void}
+ */
 document.addEventListener("DOMContentLoaded", async function () {
   try {
     // Initialize theme first so UI renders correctly
@@ -23,7 +27,10 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 });
 
-// Theme setup (light/dark)
+/**
+ * Initializes the theme (light/dark) based on user preference or saved settings.
+ * @returns {void}
+ */
 function initTheme() {
   try {
     const saved = localStorage.getItem("theme");
@@ -65,6 +72,10 @@ document
 document.getElementById("filterWeek").addEventListener("change", filterEntries);
 document.getElementById("filterType").addEventListener("change", filterEntries);
 
+/**
+ * Adds a new diary entry or updates an existing one based on the form data.
+ * @returns {void}
+ */
 function addDiaryEntry() {
   const isEditing = window.editingEntryId !== undefined;
 
@@ -157,6 +168,11 @@ function addDiaryEntry() {
   refreshUI();
 }
 
+/**
+ * Deletes a diary entry after confirming with the user.
+ * @param {number} id - The ID of the diary entry to delete.
+ * @returns {void}
+ */
 function deleteDiaryEntry(id) {
   if (confirm("Are you sure you want to delete this entry?")) {
     diaryEntries = diaryEntries.filter((entry) => entry.id !== id);
@@ -166,6 +182,11 @@ function deleteDiaryEntry(id) {
   }
 }
 
+/**
+ * Populates the form with the data of an existing entry for editing.
+ * @param {number} id - The ID of the diary entry to edit.
+ * @returns {void}
+ */
 function editDiaryEntry(id) {
   const entry = diaryEntries.find((entry) => entry.id === id);
   if (!entry) {
@@ -208,6 +229,13 @@ function editDiaryEntry(id) {
   showNotification("✏️ Entry loaded for editing", "info");
 }
 
+/**
+ * Updates the character counter for a given text field.
+ * @param {string} fieldId - The ID of the input field.
+ * @param {number} length - The current length of the text.
+ * @param {number} max - The maximum allowed length.
+ * @returns {void}
+ */
 function updateCharacterCounter(fieldId, length, max) {
   const counter = document.getElementById(fieldId + "-counter");
   if (counter) {
@@ -221,6 +249,11 @@ function updateCharacterCounter(fieldId, length, max) {
   }
 }
 
+/**
+ * Automatically resizes a textarea to fit its content.
+ * @param {string} fieldId - The ID of the textarea element.
+ * @returns {void}
+ */
 function autoResizeTextarea(fieldId) {
   const textarea = document.getElementById(fieldId);
   if (textarea) {
@@ -233,6 +266,10 @@ function autoResizeTextarea(fieldId) {
   }
 }
 
+/**
+ * Updates the form's appearance and behavior for editing an entry.
+ * @returns {void}
+ */
 function updateFormForEdit() {
   const submitBtn = document.querySelector('button[type="submit"]');
   const formTitle = document.querySelector("h3");
@@ -257,6 +294,10 @@ function updateFormForEdit() {
   cancelBtn.style.display = "block";
 }
 
+/**
+ * Resets the form's appearance to its default state for adding a new entry.
+ * @returns {void}
+ */
 function resetFormAppearance() {
   // Reset form appearance without clearing form data
   const submitBtn = document.querySelector('button[type="submit"]');
@@ -270,6 +311,10 @@ function resetFormAppearance() {
   if (cancelBtn) cancelBtn.style.display = "none";
 }
 
+/**
+ * Cancels the editing process and resets the form.
+ * @returns {void}
+ */
 function cancelEdit() {
   // Clear the editing state
   delete window.editingEntryId;
@@ -302,6 +347,10 @@ function cancelEdit() {
   showNotification("❌ Edit cancelled", "info");
 }
 
+/**
+ * Displays diary entries in the UI, applying any active filters.
+ * @returns {void}
+ */
 function displayEntries() {
   console.log(
     "displayEntries called with",
@@ -405,6 +454,10 @@ function displayEntries() {
     .join("");
 }
 
+/**
+ * Updates the statistics displayed on the dashboard.
+ * @returns {void}
+ */
 function updateStats() {
   const totalEntries = diaryEntries.length;
   const currentWeek = getCurrentWeek();
@@ -422,6 +475,10 @@ function updateStats() {
   document.getElementById("daysActive").textContent = uniqueDays.size;
 }
 
+/**
+ * Populates the week filter dropdown with available weeks from the diary entries.
+ * @returns {void}
+ */
 function populateWeekFilter() {
   const filterWeek = document.getElementById("filterWeek");
   const weeks = [...new Set(diaryEntries.map((entry) => entry.week))].sort(
@@ -436,6 +493,10 @@ function populateWeekFilter() {
       .join("");
 }
 
+/**
+ * Calculates the current week number based on a start date.
+ * @returns {number} The current week number.
+ */
 function getCurrentWeek() {
   const startDate = new Date("2025-08-04"); // Adjust semester start date
   const today = new Date();
@@ -444,6 +505,11 @@ function getCurrentWeek() {
   return Math.min(diffWeeks, 16); // Cap at 16 weeks
 }
 
+/**
+ * Formats a date string into a more readable format.
+ * @param {string} dateString - The date string to format.
+ * @returns {string} The formatted date string.
+ */
 function formatDate(dateString) {
   return new Date(dateString).toLocaleDateString("en-US", {
     year: "numeric",
@@ -454,6 +520,11 @@ function formatDate(dateString) {
   });
 }
 
+/**
+ * Formats a lesson date string into a short, readable format.
+ * @param {string} dateString - The date string to format.
+ * @returns {string} The formatted date string.
+ */
 function formatLessonDate(dateString) {
   return new Date(dateString).toLocaleDateString("en-US", {
     year: "numeric",
@@ -462,6 +533,12 @@ function formatLessonDate(dateString) {
   });
 }
 
+/**
+ * Formats a block of text into an HTML bulleted list.
+ * If the text already contains bullet-like markers, it preserves them.
+ * @param {string} content - The text content to format.
+ * @returns {string} The formatted HTML string.
+ */
 function formatContentAsBullets(content) {
   if (!content) return "";
 
@@ -496,10 +573,18 @@ function formatContentAsBullets(content) {
   }
 }
 
+/**
+ * Filters the displayed entries based on the current filter settings.
+ * @returns {void}
+ */
 function filterEntries() {
   displayEntries();
 }
 
+/**
+ * Saves the current diary data to both localStorage and Firebase (if available).
+ * @returns {Promise<void>} A promise that resolves when the data is saved.
+ */
 async function saveDiaryData() {
   try {
     // Always save to localStorage first as backup
@@ -525,6 +610,10 @@ async function saveDiaryData() {
   }
 }
 
+/**
+ * Loads diary data from Firebase, with a fallback to localStorage.
+ * @returns {Promise<void>} A promise that resolves when the data is loaded.
+ */
 async function loadDiaryData() {
   try {
     // Wait for Firebase to be initialized
@@ -586,7 +675,10 @@ async function loadDiaryData() {
   refreshUI();
 }
 
-// Refresh all UI components
+/**
+ * Refreshes all UI components with the latest data.
+ * @returns {void}
+ */
 function refreshUI() {
   if (document.getElementById("entriesContainer")) {
     updateStats();
@@ -596,6 +688,10 @@ function refreshUI() {
   }
 }
 
+/**
+ * Exports the current diary entries to a JSON file.
+ * @returns {void}
+ */
 function exportDiary() {
   const dataStr = JSON.stringify(diaryEntries, null, 2);
   const dataBlob = new Blob([dataStr], { type: "application/json" });
@@ -610,6 +706,10 @@ function exportDiary() {
   showNotification("📤 Diary exported successfully!", "success");
 }
 
+/**
+ * Triggers the file input dialog for importing diary data.
+ * @returns {void}
+ */
 function importDiary() {
   document.getElementById("importFile").click();
 }
@@ -639,6 +739,12 @@ document.getElementById("importFile").addEventListener("change", function (e) {
   }
 });
 
+/**
+ * Displays a temporary notification message on the screen.
+ * @param {string} message - The message to display.
+ * @param {string} type - The type of notification ('success', 'error', or 'info').
+ * @returns {void}
+ */
 function showNotification(message, type) {
   // Create notification element
   const notification = document.createElement("div");
@@ -673,7 +779,11 @@ function showNotification(message, type) {
   }, 3000);
 }
 
-// Navigation functionality
+/**
+ * Shows a specific section of the application and hides others.
+ * @param {string} sectionId - The ID of the section to show.
+ * @returns {void}
+ */
 function showSection(sectionId) {
   // Hide all sections
   const sections = document.querySelectorAll(".section");
@@ -739,6 +849,10 @@ function showSection(sectionId) {
   window.scrollTo(0, 0);
 }
 
+/**
+ * Updates the learning overview section with a summary of diary entries.
+ * @returns {void}
+ */
 function updateLearningOverview() {
   const container = document.getElementById("learningOverview");
 
@@ -955,6 +1069,11 @@ function updateLearningOverview() {
     .join("");
 }
 
+/**
+ * Toggles the visibility of a week's details in the learning overview.
+ * @param {string} weekId - The ID of the week container to toggle.
+ * @returns {void}
+ */
 function toggleWeek(weekId) {
   const weekContent = document.getElementById(weekId);
   const icon = document.getElementById(
@@ -972,6 +1091,11 @@ function toggleWeek(weekId) {
   }
 }
 
+/**
+ * Toggles the visibility of a day's details within a week in the learning overview.
+ * @param {string} dayId - The ID of the day container to toggle.
+ * @returns {void}
+ */
 function toggleDay(dayId) {
   const dayContent = document.getElementById(dayId);
   const iconId = "day-icon-" + dayId.replace("week-", "");
@@ -988,6 +1112,11 @@ function toggleDay(dayId) {
   }
 }
 
+/**
+ * Toggles the visibility of a diary entry's content.
+ * @param {string} contentId - The ID of the content container to toggle.
+ * @returns {void}
+ */
 function toggleContent(contentId) {
   const content = document.getElementById(contentId);
   const icon = document.getElementById(
@@ -1005,6 +1134,11 @@ function toggleContent(contentId) {
   }
 }
 
+/**
+ * Returns an icon corresponding to the given entry type.
+ * @param {string} type - The type of the diary entry.
+ * @returns {string} The corresponding icon.
+ */
 function getTypeIcon(type) {
   const icons = {
     orientation: "🎯",
@@ -1027,8 +1161,10 @@ function getTypeIcon(type) {
 //   }
 // });
 
-// Modern Form Enhancements (initialized in main DOMContentLoaded)
-
+/**
+ * Initializes modern form enhancements like character counters and validation.
+ * @returns {void}
+ */
 function initializeModernForm() {
   // Character counters
   setupCharacterCounters();
@@ -1043,6 +1179,10 @@ function initializeModernForm() {
   setupFormSubmission();
 }
 
+/**
+ * Sets up character counters for text input fields.
+ * @returns {void}
+ */
 function setupCharacterCounters() {
   const inputs = [
     { id: "entryTitle", max: 100, counterId: "entryTitle-counter" },
@@ -1075,6 +1215,10 @@ function setupCharacterCounters() {
   });
 }
 
+/**
+ * Sets up real-time form validation.
+ * @returns {void}
+ */
 function setupFormValidation() {
   const form = document.getElementById("diaryForm");
   const inputs = form.querySelectorAll("input, textarea, select");
@@ -1093,6 +1237,11 @@ function setupFormValidation() {
   });
 }
 
+/**
+ * Validates a single form field and provides visual feedback.
+ * @param {HTMLElement} field - The form field to validate.
+ * @returns {boolean} True if the field is valid, false otherwise.
+ */
 function validateField(field) {
   let isValid = true;
   let errorMessage = "";
@@ -1158,6 +1307,10 @@ function validateField(field) {
   return isValid;
 }
 
+/**
+ * Sets up various enhancements for form inputs.
+ * @returns {void}
+ */
 function setupInputEnhancements() {
   // Topics input enhancement (tag-like behavior)
   const topicsInput = document.getElementById("topics");
@@ -1195,6 +1348,10 @@ function setupInputEnhancements() {
   }
 }
 
+/**
+ * Sets up the form submission handler, including validation and loading states.
+ * @returns {void}
+ */
 function setupFormSubmission() {
   const form = document.getElementById("diaryForm");
   const submitBtn = form.querySelector('button[type="submit"]');
